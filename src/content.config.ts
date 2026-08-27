@@ -14,6 +14,8 @@ const blog = defineCollection({
 			pubDate: z.coerce.date(),
 			updatedDate: z.coerce.date().optional(),
 			heroImage: z.optional(image()),
+			// OGP image path from public/ directory (e.g. '/og/foo.png')
+			ogImage: z.string().optional(),
 		}),
 });
 
