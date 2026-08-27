@@ -1,63 +1,69 @@
-# Astro Starter Kit: Blog
+# たしからしさ (tashikarashisa)
+
+> 確率と統計で世界を見直す、小さな研究所。宝くじからHFTまで、同じ「確率のレンズ」で降りていく個人メディア。
+
+- サイト: https://tashikarashisa.com (公開準備中)
+- note: https://note.com/tashikarashisa
+- X: https://x.com/tashikarashisa
+
+## 特徴
+
+- **L1〜L6 の深掘り階段** — 各記事は6階層の深さで書かれ、一般読者から研究者まで同じ記事を読める
+- **触れるインタラクティブ** — モンテカルロや破産確率シミュレータを記事に埋め込み、感覚に落とす
+- **学術文献ベース** — 一次データではなく既発表の学術論文と一般公開情報のみを引用
+
+## 技術スタック
+
+| 層 | 選定 |
+|---|---|
+| Framework | [Astro](https://astro.build) (blog template) |
+| Content | MDX + Content Collections |
+| Math | KaTeX (remark-math + rehype-katex) |
+| Interactive | React (client:load hydration) |
+| Deploy | Vercel |
+| Registrar | Cloudflare (.com only, .jp は Domain Alert 監視のみ) |
+
+## 開発
 
 ```sh
-npm create astro@latest -- --template blog
+npm install
+npm run dev            # http://localhost:4321
 ```
 
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
+CLAUDE.md の運用ルール上、Astro dev サーバはバックグラウンド起動する：
 
-Features:
-
-- ✅ Minimal styling (make it your own!)
-- ✅ 100/100 Lighthouse performance
-- ✅ SEO-friendly with canonical URLs and Open Graph data
-- ✅ Sitemap support
-- ✅ RSS Feed support
-- ✅ Markdown & MDX support
-
-## 🚀 Project Structure
-
-Inside of your Astro project, you'll see the following folders and files:
-
-```text
-├── public/
-├── src/
-│   ├── assets/
-│   ├── components/
-│   ├── content/
-│   ├── layouts/
-│   └── pages/
-├── astro.config.mjs
-├── README.md
-├── package.json
-└── tsconfig.json
+```sh
+npx astro dev --background
+npx astro dev status
+npx astro dev logs
+npx astro dev stop
 ```
 
-Astro looks for `.astro` or `.md` files in the `src/pages/` directory. Each page is exposed as a route based on its file name.
+## ディレクトリ
 
-There's nothing special about `src/components/`, but that's where we like to put any Astro/React/Vue/Svelte/Preact components.
+```
+src/
+├── components/
+│   └── interactives/         React コンポーネント（BankruptcySimulator 等）
+├── content/blog/             MDX/MD 記事
+├── layouts/BlogPost.astro    記事レイアウト
+├── pages/                    Home / About / Blog
+├── consts.ts                 サイト名・URL
+└── styles/global.css
+astro.config.mjs              Astro + MDX + React + KaTeX 統合
+```
 
-The `src/content/` directory contains "collections" of related Markdown and MDX documents. Use `getCollection()` to retrieve posts from `src/content/blog/`, and type-check your frontmatter using an optional schema. See [Astro's Content Collections docs](https://docs.astro.build/en/guides/content-collections/) to learn more.
+## デプロイ
 
-Any static assets, like images, can be placed in the `public/` directory.
+Vercel の Astro プリセットで自動検出、追加設定不要。
 
-## 🧞 Commands
+- Production: `main` ブランチが自動デプロイ
+- Preview: PR ごとに Preview URL 発行
+- ドメイン: Vercel Dashboard → Domains で追加 → Cloudflare 側で CNAME / A レコード設定
 
-All commands are run from the root of the project, from a terminal:
+## ライセンス
 
-| Command                   | Action                                           |
-| :------------------------ | :----------------------------------------------- |
-| `npm install`             | Installs dependencies                            |
-| `npm run dev`             | Starts local dev server at `localhost:4321`      |
-| `npm run build`           | Build your production site to `./dist/`          |
-| `npm run preview`         | Preview your build locally, before deploying     |
-| `npm run astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `npm run astro -- --help` | Get help using the Astro CLI                     |
+コンテンツ（記事本文）: CC BY-NC 4.0 想定
+ソースコード: MIT 想定
 
-## 👀 Want to learn more?
-
-Check out [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
-
-## Credit
-
-This theme is based off of the lovely [Bear Blog](https://github.com/HermanMartinus/bearblog/).
+*注: このリポジトリは進行中。ライセンスは公開前に確定させる。*
