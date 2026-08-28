@@ -4,9 +4,11 @@
 import '../styles/global.css';
 import 'katex/dist/katex.min.css';
 import type { ImageMetadata } from 'astro';
-import FallbackImage from '../assets/blog-placeholder-1.jpg';
 import { SITE_TITLE } from '../consts';
 import { Font } from 'astro:assets';
+
+// Default OGP: サイト全体のシェアフォールバック用（W1 のような per-post OGP がある場合はそちらを使う）
+const DEFAULT_OG_IMAGE = '/og/default.png';
 
 interface Props {
 	title: string;
@@ -16,7 +18,7 @@ interface Props {
 
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 
-const { title, description, image = FallbackImage } = Astro.props;
+const { title, description, image = DEFAULT_OG_IMAGE } = Astro.props;
 const imageSrc = typeof image === 'string' ? image : image.src;
 ---
 
