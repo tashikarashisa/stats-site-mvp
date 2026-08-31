@@ -15,13 +15,13 @@ const today = new Date();
 		<span class="sep">·</span>
 		<a href="/about">このサイト</a>
 		<span class="sep">·</span>
-		<a href="/rss.xml">RSS</a>
+		<a href="/rss.xml" data-track="footer_rss">RSS</a>
 		<span class="sep">·</span>
-		<a href="https://note.com/tashikarashisa" target="_blank" rel="noopener">note</a>
+		<a href="https://note.com/tashikarashisa" target="_blank" rel="noopener" data-track="footer_note">note</a>
 		<span class="sep">·</span>
-		<a href="https://x.com/tashikarashisa" target="_blank" rel="noopener">X</a>
+		<a href="https://x.com/tashikarashisa" target="_blank" rel="noopener" data-track="footer_x">X</a>
 		<span class="sep">·</span>
-		<a href="https://github.com/tashikarashisa" target="_blank" rel="noopener">GitHub</a>
+		<a href="https://github.com/tashikarashisa" target="_blank" rel="noopener" data-track="footer_github">GitHub</a>
 	</div>
 	<div class="copyright">
 		&copy; {today.getFullYear()} Makoto Takahashi. All rights reserved.
@@ -30,6 +30,23 @@ const today = new Date();
 
 <Analytics />
 <SpeedInsights />
+
+<script>
+	// Send a custom Vercel Analytics event for any click on an <a data-track="...">.
+	// The event name is the value of data-track; the href is attached as a property
+	// so we can distinguish targets when the same name appears in multiple places.
+	import { track } from '@vercel/analytics';
+
+	document.addEventListener('click', (event) => {
+		const target = event.target as HTMLElement | null;
+		if (!target) return;
+		const link = target.closest<HTMLAnchorElement>('a[data-track]');
+		if (!link) return;
+		const name = link.dataset.track;
+		if (!name) return;
+		track(name, { href: link.href, path: window.location.pathname });
+	});
+</script>
 
 <style>
 	footer {
