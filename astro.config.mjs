@@ -20,7 +20,12 @@ export default defineConfig({
             remarkPlugins: [remarkMath],
             rehypePlugins: [rehypeKatex],
         }),
-        sitemap(),
+        sitemap({
+            // /go/* pages are click-count trampolines for outbound links —
+            // exclude them from the sitemap (they are already noindex + in
+            // robots.txt Disallow).
+            filter: (page) => !page.includes('/go/'),
+        }),
         react(),
     ],
     fonts: [
