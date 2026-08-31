@@ -1,17 +1,16 @@
 ---
 export interface Props {
 	/**
-	 * Full note.com URL for this article's mirror.
+	 * Redirect stub path for this article's note mirror. Prefer a local
+	 * /go/note-<slug> path (see src/pages/go/) over a direct note.com URL:
+	 * Vercel Analytics Free does not support custom events, and note's
+	 * "参照元URL" dashboard is a note プレミアム (¥500/mo) feature, so the
+	 * redirect-stub pageview is currently the only free way to count
+	 * clicks. The stub itself preserves the UTM tags on its outbound
+	 * note.com URL so that upgrading later (Vercel Pro or note
+	 * プレミアム) makes those extra views retroactively meaningful.
 	 *
-	 * Append UTM parameters so we can measure the site → note funnel via
-	 * note's own "参照元URL" dashboard (Vercel Analytics free tier does
-	 * NOT support custom events, so the data-track click event fired by
-	 * Footer.astro is currently just a no-op — the note-side referrer
-	 * count is the primary funnel metric):
-	 *
-	 *   ?utm_source=tashikarashisa.com
-	 *   &utm_medium=article_cta
-	 *   &utm_campaign=<article-slug>
+	 * Convention per article: /go/note-w1, /go/note-w2, ...
 	 */
 	noteUrl: string;
 	/**

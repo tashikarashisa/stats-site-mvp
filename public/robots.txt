@@ -1,0 +1,5 @@
+# Redirect stubs at /go/* are click-counters for outbound links (see
+# src/pages/go/*.astro). They are meta-refresh trampolines with no
+# content of their own, so keep them out of search indexes.
+User-agent: *
+Disallow: /go/
