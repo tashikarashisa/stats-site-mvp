@@ -1,10 +1,24 @@
 ---
 export interface Props {
-	/** Full note.com URL for this article's mirror. */
+	/**
+	 * Full note.com URL for this article's mirror.
+	 *
+	 * Append UTM parameters so we can measure the site → note funnel via
+	 * note's own "参照元URL" dashboard (Vercel Analytics free tier does
+	 * NOT support custom events, so the data-track click event fired by
+	 * Footer.astro is currently just a no-op — the note-side referrer
+	 * count is the primary funnel metric):
+	 *
+	 *   ?utm_source=tashikarashisa.com
+	 *   &utm_medium=article_cta
+	 *   &utm_campaign=<article-slug>
+	 */
 	noteUrl: string;
 	/**
 	 * Custom Vercel Analytics event name for the CTA click.
 	 * Keep it stable per-article so timeline comparisons stay clean.
+	 * (No-op on the current free plan; kept in place so upgrading to
+	 * Vercel Pro or swapping in another analytics tool works instantly.)
 	 */
 	eventName?: string;
 	/** Optional override for the callout headline. */
