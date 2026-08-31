@@ -1,0 +1,84 @@
+---
+export interface Props {
+	/**
+	 * Full note.com URL for this article's mirror.
+	 *
+	 * Append UTM parameters so we can measure the site → note funnel via
+	 * note's own "参照元URL" dashboard (Vercel Analytics free tier does
+	 * NOT support custom events, so the data-track click event fired by
+	 * Footer.astro is currently just a no-op — the note-side referrer
+	 * count is the primary funnel metric):
+	 *
+	 *   ?utm_source=tashikarashisa.com
+	 *   &utm_medium=article_cta
+	 *   &utm_campaign=<article-slug>
+	 */
+	noteUrl: string;
+	/**
+	 * Custom Vercel Analytics event name for the CTA click.
+	 * Keep it stable per-article so timeline comparisons stay clean.
+	 * (No-op on the current free plan; kept in place so upgrading to
+	 * Vercel Pro or swapping in another analytics tool works instantly.)
+	 */
+	eventName?: string;
+	/** Optional override for the callout headline. */
+	headline?: string;
+}
+
+const {
+	noteUrl,
+	eventName = 'article_note_cta',
+	headline = 'この記事は note でも読めます',
+} = Astro.props;
+---
+
+<aside class="note-cta">
+	<p class="headline">{headline}</p>
+	<p class="body">
+		note のスキ・コメント・フォローで反応をいただけると、次の記事の励みになります。
+	</p>
+	<a
+		class="btn"
+		href={noteUrl}
+		target="_blank"
+		rel="noopener"
+		data-track={eventName}
+	>
+		note で読む →
+	</a>
+</aside>
+
+<style>
+	.note-cta {
+		margin: 3em auto 2em auto;
+		padding: 1.25em 1.5em;
+		border: 1px solid rgba(192, 86, 33, 0.35);
+		border-left: 4px solid #c05621;
+		border-radius: 6px;
+		background: rgba(192, 86, 33, 0.04);
+	}
+	.headline {
+		margin: 0 0 0.4em 0;
+		font-weight: 600;
+		color: rgb(var(--gray-dark));
+	}
+	.body {
+		margin: 0 0 1em 0;
+		font-size: 0.95rem;
+		color: rgb(var(--gray-dark));
+		line-height: 1.6;
+	}
+	.btn {
+		display: inline-block;
+		padding: 0.55em 1.1em;
+		background: #c05621;
+		color: #fff;
+		text-decoration: none;
+		border-radius: 4px;
+		font-size: 0.95rem;
+		font-weight: 500;
+	}
+	.btn:hover {
+		background: #a04618;
+	}
+</style>
