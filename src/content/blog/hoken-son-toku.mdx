@@ -2,7 +2,10 @@
 title: '保険は損か得か ― 期待値マイナスでも人が買う理由'
 description: '損保の還元率は50-60%、生保は40-50%。数字だけ見れば宝くじと大差ない「胴元料」なのに、なぜ保険は合理的に買えるのか。期待効用と大数の法則の"逆側"を、宝くじと同じレンズで見直します。'
 pubDate: 'Sep 05 2026'
+ogImage: '/og/hoken-son-toku.png'
 ---
+
+import NoteCTA from '../../components/NoteCTA.astro';
 
 前回（[300円で夢を買う人へ](/blog/300yen-yume/)）は宝くじを"確率のレンズ"で見て、「**期待値マイナスなら基本的に買うべきでない**」という話をしました。
 
@@ -204,14 +207,4 @@ $$
 
 次の週は **モンティ・ホール問題** を扱います。今度は「金額の話」から離れて、**確率的な直感がどう壊れるか** の話。「3 つのドアから 1 つを選び、司会者が別のドアを開けて…」あの古典的パズル、あなたの直感は今も間違っています。
 
-{/*
-  TODO(w2-note-publish): note 版を公開したらここに CTA を挿入する。
-    1. src/pages/go/note-w2.astro を作る（note-w1.astro をコピーして
-       noteUrl と utm_campaign=w2_hoken を差し替え）
-    2. 下の1行を uncomment:
-
-  <NoteCTA noteUrl="/go/note-w2" eventName="w2_note_cta" />
-
-  同時に、このファイル上部の import 行に NoteCTA を追加：
-    import NoteCTA from '../../components/NoteCTA.astro';
-*/}
+<NoteCTA noteUrl="/go/note-w2" eventName="w2_note_cta" />

@@ -1,0 +1,51 @@
+---
+/**
+ * Redirect stub for the W2 note mirror.
+ *
+ * Purpose: Vercel Analytics Free does not support custom events, so we
+ * can't measure clicks on the in-article "note で読む" CTA directly. By
+ * routing the CTA through this internal page (/go/note-w2) instead of
+ * linking straight to note.com, the pageview count on THIS page becomes
+ * a proxy for the click count — visible in Vercel Analytics Free.
+ *
+ * Convention: one file per external destination we want to measure.
+ * W1 → /go/note-w1, W2 → /go/note-w2, W3 → /go/note-w3, etc.
+ *
+ * Kept out of search indexes via <meta name="robots" content="noindex">
+ * and a Disallow entry in public/robots.txt.
+ */
+import Analytics from '@vercel/analytics/astro';
+
+const noteUrl =
+	'https://note.com/tashikarashisa/n/n8faeaa93b293?utm_source=tashikarashisa.com&utm_medium=article_cta&utm_campaign=w2_hoken';
+---
+
+<!doctype html>
+<html lang="ja">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width" />
+		<meta name="robots" content="noindex, nofollow" />
+		<meta http-equiv="refresh" content={`0; url=${noteUrl}`} />
+		<link rel="canonical" href={noteUrl} />
+		<title>note に移動しています…</title>
+		<style>
+			body {
+				font-family: system-ui, -apple-system, sans-serif;
+				max-width: 40em;
+				margin: 4em auto;
+				padding: 0 1em;
+				color: #333;
+				line-height: 1.7;
+			}
+			a {
+				color: #c05621;
+			}
+		</style>
+	</head>
+	<body>
+		<p>note の記事に移動しています…</p>
+		<p>自動で切り替わらない場合は <a href={noteUrl}>こちら</a> をクリックしてください。</p>
+		<Analytics />
+	</body>
+</html>
