@@ -1,0 +1,361 @@
+---
+import BaseHead from '../components/BaseHead.astro';
+import Footer from '../components/Footer.astro';
+import Header from '../components/Header.astro';
+
+const title = '研究者コラム（L6）横断 ─ たしからしさ';
+const description =
+	'たしからしさの各記事は L1〜L6 の 6 階層で降りていきます。L6 は既発表の学術文献を引く「研究者コラム」の層。市場マイクロストラクチャ、リスク移転市場、ベイズ、多重検定、金利期間構造 ─ W1〜W5 の L6 を横断でショーケース。';
+
+type L6Entry = {
+	episode: number;
+	slug: string;
+	topic: string;
+	heading: string;
+	intro: string;
+	refs: { cite: string; note: string }[];
+};
+
+const entries: L6Entry[] = [
+	{
+		episode: 1,
+		slug: '300yen-yume',
+		topic: '市場マイクロストラクチャ・HFT',
+		heading: 'プロは何を見ているのか',
+		intro:
+			'宝くじの「胴元の取り分 54%」から、株式売買スプレッドの「0.02%」まで降りると、残った 0.02% を誰が刈り取っているのか、という問いが残る。答えは高頻度取引（HFT）。価格発見と流動性提供の研究が、ここ 15 年で急速に蓄積している。',
+		refs: [
+			{
+				cite: 'Hasbrouck (1991) "Measuring the Information Content of Stock Trades"',
+				note: 'どの注文が本当の価値を市場に運んでいるかを計量する枠組み。価格発見研究の古典。',
+			},
+			{
+				cite: 'Hendershott, Jones & Menkveld (2011) "Does Algorithmic Trading Improve Liquidity?" (JF)',
+				note: 'アルゴ取引の増加とスプレッド低下の因果を示した論文。"AT は流動性を改善する" 派の代表格。',
+			},
+			{
+				cite: 'Menkveld (2013) "High Frequency Trading and the New Market Makers"',
+				note: 'HFT のマーケットメイク行動を実データで追った必読論文。',
+			},
+			{
+				cite: 'Budish, Cramton & Shim (2015) "The High-Frequency Trading Arms Race" (QJE)',
+				note: '"連続時間市場" の構造そのものがミリ秒競争の無駄を生むと指摘。制度設計の議論に接続。',
+			},
+			{
+				cite: 'Michael Lewis『Flash Boys』',
+				note: '一般向け。光ファイバー敷設ルートが 1 マイクロ秒単位で最適化される空気感。',
+			},
+		],
+	},
+	{
+		episode: 2,
+		slug: 'hoken-son-toku',
+		topic: 'リスク移転市場・金融デリバティブ',
+		heading: 'リスク移転市場の広がり',
+		intro:
+			'保険を「リスクを他者に移転する取引」と定義し直すと、金融デリバティブ（先物・オプション・CDS・CAT ボンド）と地続きになる。再保険、Solvency II、Basel III までが同じ思想で動いている。',
+		refs: [
+			{
+				cite: 'Froot (2001) "The Market for Catastrophe Risk: A Clinical Examination" (JFE)',
+				note: 'CAT ボンド市場の実証古典。「なぜ大災害リスクは効率的に価格付けされないのか」を解く。',
+			},
+			{
+				cite: 'Cummins & Weiss (2009) "Convergence of Insurance and Financial Markets"',
+				note: '保険と金融の融合を俯瞰する review 論文。制度・商品・数学の三面で並べる。',
+			},
+			{
+				cite: 'Kunreuther, Meyer & Michel-Kerjan (2013) "The Ostrich Paradox"',
+				note: '行動経済学寄りの一般向け書籍。「なぜ人は起きるとわかっている災害に備えないのか」。',
+			},
+			{
+				cite: 'Taleb『ブラック・スワン』',
+				note: '保険と金融が同じ盲点を持つことを主張。fat tail に正規分布モデルを当てる危険の章。',
+			},
+		],
+	},
+	{
+		episode: 3,
+		slug: 'monty-hall',
+		topic: '条件付き確率・ベイズ・ベース率錯誤',
+		heading: '同じ構造は日常に潜んでいる',
+		intro:
+			'モンティ・ホール問題の "情報の非対称" は、医療検査の陽性率計算から、迷惑メール判定、ベース率錯誤まで、現代の統計リテラシーの中心にある。1990 年の論争は、博士号保有者を含む 1 万通の反論を集めた歴史的事件でもある。',
+		refs: [
+			{
+				cite: 'Selvin (1975) "A problem in probability" (American Statistician)',
+				note: 'モンティ・ホール問題の原論文。',
+			},
+			{
+				cite: 'vos Savant (1990) "Ask Marilyn" Parade Magazine',
+				note: '論争を巻き起こしたコラム。約 1,000 通の博士号保有者からの反論を集めた。',
+			},
+			{
+				cite: 'Rosenhouse (2009) "The Monty Hall Problem"',
+				note: '一冊まるまるモンティ・ホールを扱う学術書。',
+			},
+			{
+				cite: 'Kahneman & Tversky (1973) "On the psychology of prediction"',
+				note: 'ベース率無視のバイアス研究の古典。',
+			},
+		],
+	},
+	{
+		episode: 4,
+		slug: 'birthday-problem',
+		topic: '多重検定・ハッシュ衝突攻撃',
+		heading: '日常の多重検定問題',
+		intro:
+			'23 人問題の「全員 vs 全員」構造は、暗号学の衝突攻撃（SHA-1 の 2^160 → 2^80）から、医療統計の多重検定問題（GWAS で約 25,000 個の偽陽性）まで、まったく同じ数学で動いている。Benjamini-Hochberg 法が FDR 制御の標準として定着して以降、科学の再現性議論の中心でもある。',
+		refs: [
+			{
+				cite: 'Flajolet, Gardy & Thimonier (1992) "Birthday paradox, coupon collectors, caching algorithms..."',
+				note: '誕生日問題の計算機科学への応用を体系化。',
+			},
+			{
+				cite: 'Diaconis & Mosteller (1989) "Methods for Studying Coincidences" (JASA)',
+				note: '偶然の一致を統計的に扱う古典。',
+			},
+			{
+				cite: 'Benjamini & Hochberg (1995) "Controlling the false discovery rate" (JRSS-B)',
+				note: '多重検定の革命的論文。現代の医療統計の標準。',
+			},
+			{
+				cite: 'Ioannidis (2005) "Why most published research findings are false" (PLoS Medicine)',
+				note: '多重検定・p ハッキングの大問題を世に問うた。',
+			},
+		],
+	},
+	{
+		episode: 5,
+		slug: 'mortgage-math',
+		topic: '金利期間構造・住宅ローンオプション',
+		heading: 'マクロ経済と金利サイクル',
+		intro:
+			'住宅ローンは、短期金利の確率過程 × 繰上返済権・借換権という複合オプション商品。短期金利の方向は OIS 市場で観察可能で、変動金利を選ぶ借り手は「市場より自分が正しい」に 35 年賭けていることになる。',
+		refs: [
+			{
+				cite: 'Vasicek (1977) "An Equilibrium Characterization of the Term Structure"',
+				note: '金利期間構造の古典モデル。',
+			},
+			{
+				cite: 'Longstaff & Schwartz (2001) "Valuing American Options by Simulation"',
+				note: '繰上返済権の評価に使われる手法。',
+			},
+			{
+				cite: 'Deng, Quigley & Van Order (2000) "Mortgage Terminations, Heterogeneity and the Exercise of Mortgage Options" (Econometrica)',
+				note: '住宅ローンの早期終了オプションを実データで実証。',
+			},
+			{
+				cite: '植田和男（2005）『ゼロ金利との闘い』',
+				note: '日本の金融政策の内幕、一般書。',
+			},
+			{
+				cite: '白川方明（2018）『中央銀行』',
+				note: '日銀元総裁による金融政策の深い解説。',
+			},
+		],
+	},
+];
+---
+
+<!doctype html>
+<html lang="ja">
+	<head>
+		<BaseHead title={title} description={description} />
+		<style>
+			main {
+				max-width: 820px;
+				margin: auto;
+				padding: 2em 1.5em 4em;
+			}
+			.hero {
+				text-align: center;
+				padding: 2.5em 1em 2.8em;
+				margin-bottom: 2em;
+				background: #f5f2ec;
+				background-image:
+					linear-gradient(to right, #e5e0d5 1px, transparent 1px),
+					linear-gradient(to bottom, #e5e0d5 1px, transparent 1px);
+				background-size: 60px 60px;
+				border-radius: 16px;
+			}
+			.hero .eyebrow {
+				color: #c05621;
+				font-size: 0.8rem;
+				font-weight: 600;
+				letter-spacing: 0.25em;
+				margin-bottom: 0.6em;
+			}
+			.hero h1 {
+				font-size: clamp(1.6rem, 4vw, 2rem);
+				margin: 0 0 0.5em;
+				letter-spacing: 0.04em;
+				color: #1a1a1a;
+			}
+			.hero .tagline {
+				color: #555;
+				font-size: 0.95rem;
+				margin: 0;
+				line-height: 1.7;
+			}
+
+			.intro {
+				color: #333;
+				line-height: 1.9;
+				margin: 0 0 3em;
+				padding: 0 0.4em;
+			}
+			.intro p { margin: 0 0 1em; }
+			.intro small {
+				color: #8a8578;
+				font-size: 0.85rem;
+			}
+
+			.entry {
+				margin-bottom: 3em;
+				padding: 1.6em 1.8em 1.8em;
+				background: #fff;
+				border: 1px solid #eee;
+				border-left: 4px solid #c05621;
+				border-radius: 8px;
+			}
+			.entry-header {
+				margin-bottom: 1em;
+			}
+			.entry-episode {
+				color: #c05621;
+				font-size: 0.78rem;
+				font-weight: 600;
+				letter-spacing: 0.2em;
+				margin-bottom: 0.3em;
+			}
+			.entry-topic {
+				font-size: 0.95rem;
+				color: #8a8578;
+				margin: 0.2em 0 0;
+			}
+			.entry h2 {
+				font-size: 1.3rem;
+				margin: 0.1em 0 0.4em;
+				color: #1a1a1a;
+			}
+			.entry-intro {
+				color: #444;
+				line-height: 1.9;
+				margin: 1em 0 1.4em;
+			}
+			.refs {
+				list-style: none;
+				padding: 0;
+				margin: 0 0 1.4em;
+			}
+			.refs li {
+				margin-bottom: 0.9em;
+				padding-left: 1.2em;
+				position: relative;
+			}
+			.refs li:before {
+				content: "▸";
+				position: absolute;
+				left: 0;
+				color: #c05621;
+			}
+			.refs .cite {
+				font-weight: 600;
+				color: #1a1a1a;
+				font-size: 0.95rem;
+			}
+			.refs .note {
+				font-size: 0.85rem;
+				color: #666;
+				margin-top: 0.2em;
+				line-height: 1.7;
+			}
+			.entry-link {
+				display: inline-block;
+				color: #c05621;
+				text-decoration: none;
+				font-size: 0.9rem;
+				font-weight: 600;
+				border-bottom: 1px solid currentColor;
+				padding-bottom: 1px;
+			}
+			.entry-link:hover {
+				color: #a04618;
+			}
+
+			.footer-cta {
+				margin-top: 3em;
+				padding: 1.6em 1.8em;
+				background: #faf7f2;
+				border-radius: 12px;
+				text-align: center;
+			}
+			.footer-cta a {
+				color: #c05621;
+				text-decoration: none;
+				font-weight: 600;
+			}
+		</style>
+	</head>
+	<body>
+		<Header />
+		<main>
+			<div class="hero">
+				<div class="eyebrow">RESEARCH LAYER</div>
+				<h1>研究者コラム（L6）横断</h1>
+				<p class="tagline">
+					各記事の最終層 L6 は、既発表論文を引く学術セクションです。<br>
+					市場マイクロストラクチャ、リスク移転市場、ベイズ、多重検定、金利期間構造。
+				</p>
+			</div>
+
+			<div class="intro">
+				<p>
+					「たしからしさ」の各記事は、L1（一般読者向けの一行）から L6（研究者向けの学術文献）まで、
+					6 階層の階段構造になっています。<strong>L6 だけを横断で読めば、同じ "確率のレンズ" が
+					どんな研究領域で深められているか</strong> が見えるはず。
+				</p>
+				<p>
+					<small>※ 全ての引用は既発表の論文・書籍のみ。筆者（運営者）の未発表研究データは、本サイト上では紹介しません。
+					一次情報としての論文リンクを辿るには、下記の引用名を Google Scholar 等で検索してください。</small>
+				</p>
+			</div>
+
+			{entries.map((e) => (
+				<div class="entry">
+					<div class="entry-header">
+						<div class="entry-episode">EPISODE #{e.episode}</div>
+						<h2>{e.heading}</h2>
+						<p class="entry-topic">{e.topic}</p>
+					</div>
+					<p class="entry-intro">{e.intro}</p>
+					<ul class="refs">
+						{e.refs.map((r) => (
+							<li>
+								<div class="cite">{r.cite}</div>
+								<div class="note">{r.note}</div>
+							</li>
+						))}
+					</ul>
+					<a href={`/blog/${e.slug}/#l6`} class="entry-link">
+						記事中の L6 セクションへ →
+					</a>
+				</div>
+			))}
+
+			<div class="footer-cta">
+				<div style="margin-bottom: 0.6em; color: #1a1a1a; font-weight: 600;">
+					研究・執筆・登壇のご相談
+				</div>
+				<p style="font-size: 0.9rem; color: #666; margin: 0 0 0.8em;">
+					市場マイクロストラクチャ、価格発見、高頻度取引データ解析の研究者です。
+				</p>
+				<a href="https://x.com/tashikarashisa" target="_blank" rel="noopener">
+					X @tashikarashisa の DM まで →
+				</a>
+			</div>
+		</main>
+		<Footer />
+	</body>
+</html>
