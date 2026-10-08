@@ -7,117 +7,417 @@ import Header from '../components/Header.astro';
 import { SITE_DESCRIPTION, SITE_TITLE } from '../consts';
 
 const posts = (await getCollection('blog')).sort(
-    (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
+	(a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
 );
-const latest = posts.slice(0, 6);
+
+// シリーズのメタ情報（手動キュレーション、連載構造を可視化するため）
+type AxisKind = 'money' | 'intuition';
+type SeriesMeta = {
+	episode: number;
+	axis: AxisKind;
+	shortTitle: string;
+	keyConcept: string;
+	punchline: string;
+};
+const seriesMeta: Record<string, SeriesMeta> = {
+	'300yen-yume':      { episode: 1, axis: 'money',     shortTitle: '宝くじ',           keyConcept: '期待値・大数の法則',             punchline: '300円 → 140円' },
+	'hoken-son-toku':   { episode: 2, axis: 'money',     shortTitle: '保険',             keyConcept: '期待効用・オプション買い',       punchline: '1万円 → 5,000円' },
+	'monty-hall':       { episode: 3, axis: 'intuition', shortTitle: 'モンティ・ホール', keyConcept: '条件付き確率・ベイズ',           punchline: '1/3 → 2/3' },
+	'birthday-problem': { episode: 4, axis: 'intuition', shortTitle: '誕生日問題',       keyConcept: '多重検定・ハッシュ衝突',         punchline: '23人 → 50%' },
+	'mortgage-math':    { episode: 5, axis: 'money',     shortTitle: '住宅ローン',       keyConcept: 'オプション売り・金利サイクル',   punchline: '35年で1,300万円' },
+};
+
+const episodes = posts
+	.map((p) => ({ post: p, meta: seriesMeta[p.id] }))
+	.filter((e) => e.meta)
+	.sort((a, b) => a.meta.episode - b.meta.episode);
+
+const moneyEpisodes = episodes.filter((e) => e.meta.axis === 'money');
+const intuitionEpisodes = episodes.filter((e) => e.meta.axis === 'intuition');
 ---
 
 <!doctype html>
 <html lang="ja">
-    <head>
-        <BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
-        <style>
-            main {
-                width: 720px;
-                max-width: calc(100% - 2em);
-                margin: auto;
-                padding: 2em 1em;
-            }
-            .hero {
-                text-align: center;
-                padding: 2em 0 2.5em;
-                border-bottom: 1px solid #eee;
-                margin-bottom: 2em;
-            }
-            .hero h1 {
-                font-size: 2.2rem;
-                margin: 0 0 0.3em;
-                letter-spacing: 0.02em;
-            }
-            .hero .tagline {
-                color: #666;
-                font-size: 1rem;
-                margin: 0;
-            }
-            .intro {
-                margin: 0 0 2.5em;
-                line-height: 1.9;
-                color: #333;
-            }
-            .intro p {
-                margin: 0 0 1em;
-            }
-            h2 {
-                font-size: 1.15rem;
-                margin: 0 0 1em;
-                padding-bottom: 0.3em;
-                border-bottom: 1px solid #eee;
-            }
-            .post-list {
-                list-style: none;
-                padding: 0;
-                margin: 0;
-            }
-            .post-list li {
-                padding: 1em 0;
-                border-bottom: 1px solid #f0f0f0;
-            }
-            .post-list a {
-                text-decoration: none;
-                color: inherit;
-                display: block;
-            }
-            .post-list a:hover .title {
-                color: #c05621;
-            }
-            .post-list .title {
-                font-size: 1.05rem;
-                font-weight: 600;
-                margin: 0 0 0.2em;
-                transition: color 0.2s;
-            }
-            .post-list .date {
-                font-size: 0.8rem;
-                color: #999;
-            }
-        </style>
-    </head>
-    <body>
-        <Header />
-        <main>
-            <div class="hero">
-                <h1>たしからしさ</h1>
-                <p class="tagline">確率と統計で世界を見直す、小さな研究所。</p>
-            </div>
+	<head>
+		<BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
+		<style>
+			main {
+				max-width: 960px;
+				margin: auto;
+				padding: 2em 1.5em 4em;
+			}
 
-            <div class="intro">
-                <p>
-                    300円の宝くじから始めて、期待値・大数の法則を経て、金融のスプレッド、市場マイクロストラクチャの研究まで
-                    ―― <strong>同じひとつの「確率のレンズ」</strong> で世界を降りていくメディアです。
-                </p>
-                <p>
-                    各記事は L1（一般読者向けのワンフレーズ）から L6（研究者向けの学術文献）まで、
-                    6階層の深掘り階段になっています。急いでいる人は太字だけ拾ってください。
-                    数式は触れるインタラクティブで感覚に落とします。
-                </p>
-            </div>
+			/* === Hero === */
+			.hero {
+				text-align: center;
+				padding: 3em 1em 3.5em;
+				margin-bottom: 2.5em;
+				background: #f5f2ec;
+				background-image:
+					linear-gradient(to right, #e5e0d5 1px, transparent 1px),
+					linear-gradient(to bottom, #e5e0d5 1px, transparent 1px);
+				background-size: 60px 60px;
+				border-radius: 16px;
+			}
+			.hero h1 {
+				font-size: clamp(2.4rem, 6vw, 3.4rem);
+				margin: 0 0 0.4em;
+				letter-spacing: 0.08em;
+				color: #1a1a1a;
+			}
+			.hero .tagline {
+				color: #555;
+				font-size: clamp(1rem, 2.5vw, 1.15rem);
+				margin: 0;
+				letter-spacing: 0.04em;
+			}
+			.hero .intro-line {
+				color: #8a8578;
+				font-size: 0.9rem;
+				margin: 1.2em 0 0;
+				letter-spacing: 0.1em;
+			}
 
-            <h2>最新の記事</h2>
-            <ul class="post-list">
-                {
-                    latest.map((post) => (
-                        <li>
-                            <a href={`/blog/${post.id}/`}>
-                                <div class="title">{post.data.title}</div>
-                                <div class="date">
-                                    <FormattedDate date={post.data.pubDate} />
-                                </div>
-                            </a>
-                        </li>
-                    ))
-                }
-            </ul>
-        </main>
-        <Footer />
-    </body>
+			/* === Section === */
+			section {
+				margin-bottom: 3em;
+			}
+			h2 {
+				font-size: 1.3rem;
+				margin: 0 0 1em;
+				padding-left: 0.6em;
+				border-left: 4px solid #c05621;
+				color: #333;
+			}
+			.section-intro {
+				color: #555;
+				line-height: 1.8;
+				margin: 0 0 1.5em;
+			}
+
+			/* === Series Matrix === */
+			.matrix {
+				display: grid;
+				grid-template-columns: 1fr 1fr;
+				gap: 1em;
+			}
+			.matrix-cell {
+				background: #faf7f2;
+				padding: 1.4em 1.6em;
+				border-radius: 12px;
+				border-top: 4px solid #c05621;
+			}
+			.matrix-cell.intuition {
+				border-top-color: #4a9;
+			}
+			.matrix-axis-label {
+				color: #c05621;
+				font-size: 0.85rem;
+				font-weight: 600;
+				letter-spacing: 0.2em;
+				margin-bottom: 0.3em;
+			}
+			.matrix-cell.intuition .matrix-axis-label {
+				color: #4a9;
+			}
+			.matrix-axis-title {
+				font-size: 1.1rem;
+				font-weight: 600;
+				color: #1a1a1a;
+				margin-bottom: 0.8em;
+			}
+			.matrix-list {
+				list-style: none;
+				padding: 0;
+				margin: 0;
+				font-size: 0.9rem;
+				color: #555;
+			}
+			.matrix-list li {
+				margin: 0.3em 0;
+			}
+			.matrix-list a {
+				color: inherit;
+				text-decoration: none;
+			}
+			.matrix-list a:hover {
+				color: #c05621;
+			}
+			.matrix-list .ep {
+				color: #8a8578;
+				font-weight: 600;
+				margin-right: 0.4em;
+			}
+
+			/* === Episode cards === */
+			.card-grid {
+				display: grid;
+				grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+				gap: 1em;
+			}
+			.card {
+				display: block;
+				background: #fff;
+				border: 1px solid #eee;
+				border-radius: 12px;
+				overflow: hidden;
+				text-decoration: none;
+				color: inherit;
+				transition: transform 0.15s, box-shadow 0.15s;
+			}
+			.card:hover {
+				transform: translateY(-2px);
+				box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+			}
+			.card-img {
+				width: 100%;
+				aspect-ratio: 1200 / 630;
+				object-fit: cover;
+				display: block;
+				background: #f5f2ec;
+			}
+			.card-body {
+				padding: 1em 1.1em 1.2em;
+			}
+			.card-badge {
+				display: inline-block;
+				font-size: 0.75rem;
+				font-weight: 600;
+				letter-spacing: 0.1em;
+				padding: 0.15em 0.6em;
+				border-radius: 3px;
+				margin-bottom: 0.6em;
+			}
+			.card-badge.money {
+				color: #c05621;
+				background: #faece2;
+			}
+			.card-badge.intuition {
+				color: #4a9;
+				background: #e5f2ee;
+			}
+			.card-title {
+				font-size: 1rem;
+				font-weight: 600;
+				line-height: 1.5;
+				margin: 0 0 0.5em;
+				color: #1a1a1a;
+			}
+			.card-concept {
+				font-size: 0.82rem;
+				color: #8a8578;
+				margin: 0;
+			}
+			.card-date {
+				font-size: 0.75rem;
+				color: #aaa;
+				margin-top: 0.4em;
+			}
+
+			/* === Reading guides === */
+			.guides {
+				display: grid;
+				grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+				gap: 1em;
+			}
+			.guide {
+				background: #faf7f2;
+				padding: 1.2em 1.4em;
+				border-radius: 10px;
+				text-decoration: none;
+				color: inherit;
+				transition: background 0.15s;
+			}
+			.guide:hover {
+				background: #f0e8d8;
+			}
+			.guide-label {
+				color: #c05621;
+				font-size: 0.75rem;
+				font-weight: 600;
+				letter-spacing: 0.15em;
+				margin-bottom: 0.3em;
+			}
+			.guide-title {
+				font-size: 1rem;
+				font-weight: 600;
+				color: #1a1a1a;
+				margin: 0 0 0.3em;
+			}
+			.guide-desc {
+				font-size: 0.82rem;
+				color: #666;
+				margin: 0;
+				line-height: 1.6;
+			}
+
+			/* === Subscribe === */
+			.subscribe {
+				background: #faf7f2;
+				padding: 1.6em 1.8em;
+				border-radius: 12px;
+				text-align: center;
+			}
+			.subscribe-title {
+				font-size: 1.05rem;
+				font-weight: 600;
+				color: #1a1a1a;
+				margin: 0 0 0.4em;
+			}
+			.subscribe-desc {
+				font-size: 0.9rem;
+				color: #666;
+				margin: 0 0 1.2em;
+			}
+			.subscribe-links {
+				display: flex;
+				flex-wrap: wrap;
+				justify-content: center;
+				gap: 0.6em 1.4em;
+				font-size: 0.9rem;
+			}
+			.subscribe-links a {
+				color: #c05621;
+				text-decoration: none;
+			}
+			.subscribe-links a:hover {
+				text-decoration: underline;
+			}
+
+			@media (max-width: 600px) {
+				.matrix {
+					grid-template-columns: 1fr;
+				}
+			}
+		</style>
+	</head>
+	<body>
+		<Header />
+		<main>
+			<!-- Hero -->
+			<div class="hero">
+				<h1>たしからしさ</h1>
+				<p class="tagline">確率と統計で世界を見直す、小さな研究所。</p>
+				<p class="intro-line">お金の話 ─── 直感の罠 ─── 研究の最前線</p>
+			</div>
+
+			<!-- Intro -->
+			<section>
+				<p class="section-intro">
+					300 円の宝くじから始めて、期待値・大数の法則を経て、金融のスプレッド、
+					市場マイクロストラクチャの研究まで ─ <strong>同じひとつの「確率のレンズ」</strong>
+					で世界を降りていくメディアです。各記事は L1（一般読者向けのワンフレーズ）から
+					L6（研究者向けの学術文献）まで、6 階層の階段構造になっています。
+				</p>
+			</section>
+
+			<!-- Series Matrix -->
+			<section>
+				<h2>連載の全体像</h2>
+				<p class="section-intro">
+					2 つの縦筋が交互に降りていきます。
+					<strong style="color: #c05621;">「お金」</strong>（日常の意思決定を数学で解く）と、
+					<strong style="color: #4a9;">「直感の罠」</strong>（確率が直感を裏切る瞬間）。
+				</p>
+				<div class="matrix">
+					<div class="matrix-cell">
+						<div class="matrix-axis-label">AXIS 1</div>
+						<div class="matrix-axis-title">お金のレンズ</div>
+						<ul class="matrix-list">
+							{moneyEpisodes.map((e) => (
+								<li>
+									<a href={`/blog/${e.post.id}/`}>
+										<span class="ep">#{e.meta.episode}</span>
+										{e.meta.shortTitle}
+										<span style="color: #aaa; font-size: 0.8rem; margin-left: 0.4em;">{e.meta.punchline}</span>
+									</a>
+								</li>
+							))}
+						</ul>
+					</div>
+					<div class="matrix-cell intuition">
+						<div class="matrix-axis-label">AXIS 2</div>
+						<div class="matrix-axis-title">直感の罠のレンズ</div>
+						<ul class="matrix-list">
+							{intuitionEpisodes.map((e) => (
+								<li>
+									<a href={`/blog/${e.post.id}/`}>
+										<span class="ep">#{e.meta.episode}</span>
+										{e.meta.shortTitle}
+										<span style="color: #aaa; font-size: 0.8rem; margin-left: 0.4em;">{e.meta.punchline}</span>
+									</a>
+								</li>
+							))}
+						</ul>
+					</div>
+				</div>
+			</section>
+
+			<!-- Episode cards -->
+			<section>
+				<h2>連載 {episodes.length} 本</h2>
+				<div class="card-grid">
+					{episodes.map((e) => (
+						<a href={`/blog/${e.post.id}/`} class="card">
+							{e.post.data.ogImage && (
+								<img src={e.post.data.ogImage} alt="" class="card-img" loading="lazy" />
+							)}
+							<div class="card-body">
+								<span class={`card-badge ${e.meta.axis}`}>
+									#{e.meta.episode} {e.meta.axis === 'money' ? 'お金' : '直感の罠'}
+								</span>
+								<h3 class="card-title">{e.post.data.title}</h3>
+								<p class="card-concept">キー概念：{e.meta.keyConcept}</p>
+								<div class="card-date">
+									<FormattedDate date={e.post.data.pubDate} />
+								</div>
+							</div>
+						</a>
+					))}
+				</div>
+			</section>
+
+			<!-- Reading guides -->
+			<section>
+				<h2>どれから読むか</h2>
+				<div class="guides">
+					<a href="/blog/300yen-yume/" class="guide">
+						<div class="guide-label">FROM MONEY</div>
+						<div class="guide-title">お金の話から</div>
+						<p class="guide-desc">
+							宝くじ・保険・住宅ローン。身近な意思決定を数学で解き直す回から始める。
+						</p>
+					</a>
+					<a href="/blog/monty-hall/" class="guide">
+						<div class="guide-label">FROM INTUITION</div>
+						<div class="guide-title">直感の罠から</div>
+						<p class="guide-desc">
+							モンティ・ホール、誕生日問題。確率が直感を裏切る瞬間に驚きたい方へ。
+						</p>
+					</a>
+					<a href="/blog/300yen-yume/#l6" class="guide">
+						<div class="guide-label">FROM RESEARCH</div>
+						<div class="guide-title">研究者コラムから</div>
+						<p class="guide-desc">
+							各記事の L6 は学術文献引用つき。市場マイクロストラクチャまで降りられます。
+						</p>
+					</a>
+				</div>
+			</section>
+
+			<!-- Subscribe -->
+			<section class="subscribe">
+				<div class="subscribe-title">毎週 1 本、確率のレンズを更新します</div>
+				<p class="subscribe-desc">サイト・note・YouTube・X ─ お好きな入口で</p>
+				<div class="subscribe-links">
+					<a href="/rss.xml">📡 RSS</a>
+					<a href="https://note.com/tashikarashisa" target="_blank" rel="noopener">📝 note</a>
+					<a href="https://youtube.com/@tashikarashisa" target="_blank" rel="noopener">📺 YouTube</a>
+					<a href="https://x.com/tashikarashisa" target="_blank" rel="noopener">🐦 X</a>
+					<a href="/about">このサイトについて →</a>
+				</div>
+			</section>
+		</main>
+		<Footer />
+	</body>
 </html>
