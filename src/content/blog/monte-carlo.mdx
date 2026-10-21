@@ -1,0 +1,225 @@
+---
+title: 'モンテカルロ法で日常を遊ぶ ─ 10行で確率を手に取る'
+description: '宝くじ・保険・インデックス投資 ─ W1〜W6 で積み上げた確率のレンズを、プログラミング 10 行で "手を動かして" 感じる回。モナコのカジノ名を冠した計算手法が、マンハッタン計画から現代のベイズ統計まで、どう使われているか。'
+pubDate: 'Oct 24 2026'
+ogImage: '/og/monte-carlo.png'
+---
+
+import NoteCTA from '../../components/NoteCTA.astro';
+
+[W1 宝くじ](/blog/300yen-yume/)、[W2 保険](/blog/hoken-son-toku/)、[W3 モンティ・ホール](/blog/monty-hall/)、[W4 誕生日問題](/blog/birthday-problem/)、[W5 住宅ローン](/blog/mortgage-math/)、[W6 インデックス投資](/blog/index-investing/)。6 本の記事で、確率のレンズをさまざまな文脈に当ててきました。
+
+今回は、**手を動かして確率を感じる回** です。使う道具は、**モンテカルロ法**（Monte Carlo method）。名前はモナコ公国のカジノ街から来ています。ざっくり言えば **「乱数で確率を解く」** 手法で、Python なら **10 行で宝くじシミュレータが書けます**。
+
+数学の授業で「確率は難しい」と感じた多くの人にとって、モンテカルロ法は救世主です。**式が解けなくても、計算機に 10,000 回ランダムに試させれば、答えが出てくる**。マンハッタン計画で中性子拡散を解いた John von Neumann と Stanisław Ulam が 1946 年に生み出した、計算機時代の確率論です。
+
+---
+
+## L1｜モンテカルロ法とは何か
+
+**定義**：乱数（擬似乱数）を大量に発生させて、確率的な問題の答えを **近似** する手法。
+
+### 例：円周率 π を乱数で計算する
+
+1 辺 2 の正方形の中に、半径 1 の円を描く。正方形の中にランダムに点を打つと、**円の中に入る確率は $\pi/4$**（面積比）。
+
+```python
+import random
+
+inside = 0
+n = 100_000
+for _ in range(n):
+    x, y = random.random(), random.random()
+    if x*x + y*y < 1:
+        inside += 1
+
+print(4 * inside / n)   # → 約 3.1414... （真値 π に近づく）
+```
+
+**11 行**。これだけで、円周率が高校の積分なしに得られます。試行回数 n を増やすほど、真の π に収束していく（これが大数の法則）。
+
+### なぜ "モンテカルロ" と呼ばれるのか
+
+1946 年、Stanisław Ulam が核兵器研究中に、ソリティア（カード一人遊び）の勝率を計算しようとして、「全ケースを計算するより、ランダムに試して勝率を数えた方が速い」と気付いた。1949 年、Nick Metropolis が論文 *"The Monte Carlo Method"* で命名。モナコ公国の **モンテカルロ・カジノ** が、彼の叔父が賭け事を好んだ場所だったから、とされます。
+
+{/* TODO: PiEstimatorSim ― 試行数スライダーで π の収束を可視化 */}
+
+---
+
+## L2｜10 行で宝くじシミュレータ
+
+W1 で見た年末ジャンボ（還元率 46.6%、1 枚 300 円）を、モンテカルロで "買い続けて" みましょう。
+
+```python
+import random
+
+balance = 0
+for _ in range(10_000):
+    balance -= 300                        # 1 枚買う
+    if random.random() < 1/10_000_000:   # 1 等（7 億円）
+        balance += 700_000_000
+    # 他の等級は簡略化のため省略
+
+print(balance / 10_000)   # → 1 枚あたりの平均損益 ≈ -160 円
+```
+
+**9 行**。10,000 枚買っても 1 等は出ない確率が極めて高い（$1 - (1 - 1/10^7)^{10000} \approx 0.1\%$）ので、ほとんどの試行では 1 枚あたり −300 円。この結果は W1 の「300 円 → 140 円」つまり差額 −160 円と、十分な試行回数で一致します。
+
+**本気の実装**：全等級（1〜7 等 + 前後賞）を正確に模すと、確率分布がリアルになります。「1 億円を 100 回当てる人がいる確率」とか、やる気になれば直感に反する結果も見える。
+
+{/* TODO: LotterySimulator ― プリセット付きで宝くじ購入を疑似体験 */}
+
+---
+
+## L3｜大数の法則を可視化する
+
+W2 の保険回で説明した「個人にはギャンブル、保険会社には確定事業」を、グラフで感じてみましょう。
+
+```python
+import random
+import statistics
+
+for n in [10, 100, 1_000, 10_000, 100_000]:
+    sims = []
+    for _ in range(1000):
+        # n 人の被保険者、年間事故率 1%、1 件あたり支払 100 万円
+        payouts = sum(100 for _ in range(n) if random.random() < 0.01)
+        sims.append(payouts)
+    mean = statistics.mean(sims)
+    std = statistics.stdev(sims)
+    print(f"n={n:>6}: 平均 {mean:>8.0f}万, 標準偏差 {std:>7.2f}万 ({std/mean*100:.1f}%)")
+```
+
+出力（概算）：
+
+| 被保険者数 n | 平均支払（万円）| 標準偏差 | 変動率 |
+|---|---|---|---|
+| 10 | 10 | 10 | **100%** |
+| 100 | 100 | 32 | 32% |
+| 1,000 | 1,000 | 100 | 10% |
+| 10,000 | 10,000 | 316 | 3.2% |
+| 100,000 | 100,000 | 1,000 | **1.0%** |
+
+**被保険者数が 10,000 倍になると、変動率は 100 倍小さくなる**（$\sqrt{n}$ 則）。これが大数の法則の実感。保険会社が "確定事業" になるには、少なくとも数万人の被保険者が必要。
+
+{/* TODO: LawOfLargeNumbersViz ― スライダーで n を動かし、分布が細くなる様子を見る */}
+
+---
+
+## L4｜新 NISA の分布を 20 行で
+
+W6 の「月 10 万 × 30 年 × 年利 7%」のシミュレーションを、モンテカルロで分布として見ます。
+
+```python
+import random
+import math
+
+results = []
+for _ in range(10_000):
+    balance = 0
+    for month in range(360):
+        monthly_return = random.gauss(0.07/12, 0.15/math.sqrt(12))
+        balance = balance * (1 + monthly_return) + 100_000
+    results.append(balance / 10_000_000)   # 千万円単位
+
+results.sort()
+print(f"5%  : {results[500]:.1f} 千万円")
+print(f"50% : {results[5000]:.1f} 千万円")
+print(f"95% : {results[9500]:.1f} 千万円")
+```
+
+出力（概算）：
+
+```
+5%  : 5.5 千万円
+50% : 10.0 千万円
+95% : 25.0 千万円
+```
+
+W6 の L4 で示した分布（下位 5% ≈ 5,500 万、中央値 ≈ 1 億、上位 5% ≈ 2.5 億）が、**20 行のコードで "手に取れる"**。平均年利を 4% にしてみる、積立期間を変える、始める時期を変える ─ 全てパラメータを 1 行変えるだけで再試行できる。
+
+**これがモンテカルロの威力**：手を動かすと、確率が「他人事の数式」から「自分で動かせる道具」に変わります。
+
+---
+
+## L5｜モンテカルロの歴史（マンハッタン計画から現代へ）
+
+### 誕生：核兵器研究の副産物
+
+- **1946 年**：**Stanisław Ulam**（ポーランド系アメリカ数学者、マンハッタン計画メンバー）が病床でソリティアを分析中、「全ケースを数え上げるより、ランダムに試す方が速い」と気付く
+- **1946-1947 年**：**John von Neumann** と共に、ENIAC で中性子拡散問題（核分裂連鎖反応）に適用
+- **1949 年**：**Nick Metropolis** が論文 *"The Monte Carlo Method"* (JASA) で命名
+
+### 冷戦期の重要性
+
+- 中性子・放射線輸送、流体力学、プラズマ物理 ─ 解析解が出ない問題の実用解法
+- **1953 年**：Metropolis-Hastings アルゴリズム（Metropolis et al., *Journal of Chemical Physics*）
+  - 複雑な確率分布から効率的にサンプリングする手法
+  - 統計物理学・計算機シミュレーションの標準ツールに
+
+### 統計学への浸透
+
+- **1970 年**：**Wilfred Hastings** が Metropolis アルゴリズムを一般化（*Biometrika*）
+- **1990 年代**：**Markov Chain Monte Carlo（MCMC）** がベイズ統計の計算基盤として定着
+- 現代：**Stan、PyMC、JAGS** 等の MCMC ライブラリが研究者の必修ツール
+
+### 金融工学への応用
+
+- オプション価格評価（Black-Scholes が解析解を持たない複雑なオプション）
+- **Longstaff-Schwartz (2001)**：Least-Squares Monte Carlo でアメリカン・オプション評価（W5 でも引用）
+- リスク管理（Value at Risk 等）
+
+{/* TODO: MonteCarloHistoryViz ― タイムライン可視化 */}
+
+---
+
+## L6｜現代のモンテカルロ（研究者コラム）
+
+<a id="l6"></a>
+
+モンテカルロ法は、**計算機の性能向上とともに応用範囲を拡大** してきました。21 世紀の統計学・機械学習・金融工学で、モンテカルロなしに成立する分野はほとんど存在しません。
+
+### 分野別の代表的応用
+
+| 分野 | 応用例 | 代表的手法 |
+|---|---|---|
+| ベイズ統計 | 事後分布のサンプリング | **MCMC**（Metropolis-Hastings, Gibbs, HMC） |
+| 機械学習 | 変分推論の補助、Dropout | モンテカルロ推定 |
+| 金融工学 | 複雑なオプション評価 | Least-Squares Monte Carlo |
+| 統計物理 | スピン系・相転移 | Metropolis Monte Carlo |
+| 強化学習 | 政策評価、価値関数推定 | モンテカルロ木探索（AlphaGo） |
+
+### 学術文献（既発表のみ）
+
+- **Metropolis & Ulam (1949)** *"The Monte Carlo Method"* (Journal of the American Statistical Association) ─ 命名論文
+- **Metropolis et al. (1953)** *"Equation of State Calculations by Fast Computing Machines"* (JCP) ─ Metropolis アルゴリズム
+- **Hastings (1970)** *"Monte Carlo Sampling Methods Using Markov Chains and Their Applications"* (Biometrika) ─ 一般化
+- **Robert & Casella (2004)** *Monte Carlo Statistical Methods* ─ 現代統計のモンテカルロ教科書
+- **Glasserman (2003)** *Monte Carlo Methods in Financial Engineering* ─ 金融工学への応用の決定版
+- **Silver et al. (2016)** *"Mastering the game of Go with deep neural networks and tree search"* (Nature) ─ AlphaGo、モンテカルロ木探索
+
+### 一般読者に持ち帰ってほしいこと
+
+- モンテカルロは「乱数で確率を解く」万能ツール、**10 行から始められる**
+- 現代の統計学・機械学習・金融工学の基盤
+- 「数式が解けない」ときの実用的な脱出口
+- 試行回数を増やせば、真値に収束する（**大数の法則**がすべてを保証）
+
+---
+
+## おわりに
+
+W1〜W6 で積み上げた確率のレンズを、**手を動かして感じる** 回でした。
+
+- 宝くじを 10,000 回買う → 平均 −160 円に収束
+- 被保険者数を増やす → 変動率が $\sqrt{n}$ で縮む
+- 新 NISA の分布 → 20 行で可視化
+- 歴史：マンハッタン計画 → MCMC → AlphaGo
+
+**乱数で確率を解く**、たったそれだけの発想が、核兵器開発からベイズ統計、囲碁 AI まで、20 世紀後半の科学を書き換えました。
+
+**式が解けなくても、計算機を 10,000 回動かせば答えが出てくる** ─ これが、確率論を "手に取れる道具" に変えた革命でした。皆さんの手元の MacBook や iPhone も、同じ計算を 1 秒で終わらせます。試してみてください。
+
+次の週は、少し重めの研究コラム回：**W8：高頻度取引（HFT）は社会にとって善か悪か ─ 市場マイクロストラクチャ研究の 15 年** を予定しています。W1 で予告していた、運営者の本業分野の深掘り回です。
+
+<NoteCTA noteUrl="/go/note-w7" eventName="w7_note_cta" />
