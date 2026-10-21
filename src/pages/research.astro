@@ -16,7 +16,7 @@ type L6Entry = {
 	refs: { cite: string; note: string }[];
 };
 
-const entries: L6Entry[] = [
+const entries: L6Entry[] = ([
 	{
 		episode: 1,
 		slug: '300yen-yume',
@@ -156,6 +156,40 @@ const entries: L6Entry[] = [
 		],
 	},
 	{
+		episode: 7,
+		slug: 'monte-carlo',
+		topic: '計算機シミュレーション・MCMC',
+		heading: '現代のモンテカルロ',
+		intro:
+			'1946 年に Ulam と von Neumann が核兵器研究のために編み出したモンテカルロ法は、1990 年代の MCMC 革命を経て、現代のベイズ統計・機械学習・金融工学の基盤となった。10 行で宝くじシミュレータが書けるシンプルさと、AlphaGo のモンテカルロ木探索まで繋がる応用範囲。',
+		refs: [
+			{
+				cite: 'Metropolis & Ulam (1949) "The Monte Carlo Method" (JASA)',
+				note: '命名論文。マンハッタン計画で発展した手法を統計学に紹介。',
+			},
+			{
+				cite: 'Metropolis et al. (1953) "Equation of State Calculations by Fast Computing Machines" (JCP)',
+				note: 'Metropolis アルゴリズム。統計物理学・計算機シミュレーションの標準に。',
+			},
+			{
+				cite: 'Hastings (1970) "Monte Carlo Sampling Methods Using Markov Chains" (Biometrika)',
+				note: 'Metropolis アルゴリズムの一般化、現代 MCMC の原点。',
+			},
+			{
+				cite: 'Robert & Casella (2004) "Monte Carlo Statistical Methods"',
+				note: '現代統計のモンテカルロ教科書。',
+			},
+			{
+				cite: 'Glasserman (2003) "Monte Carlo Methods in Financial Engineering"',
+				note: '金融工学への応用の決定版。',
+			},
+			{
+				cite: 'Silver et al. (2016) "Mastering the game of Go with deep neural networks and tree search" (Nature)',
+				note: 'AlphaGo、モンテカルロ木探索と深層学習の統合。',
+			},
+		],
+	},
+	{
 		episode: 6,
 		slug: 'index-investing',
 		topic: '効率的市場仮説・行動ファイナンス',
@@ -193,7 +227,7 @@ const entries: L6Entry[] = [
 			},
 		],
 	},
-];
+] as L6Entry[]).sort((a, b) => a.episode - b.episode);
 ---
 
 <!doctype html>
