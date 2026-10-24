@@ -2,6 +2,7 @@
 
 import mdx from '@astrojs/mdx';
 import sitemap from '@astrojs/sitemap';
+import vercel from '@astrojs/vercel';
 import { defineConfig, fontProviders } from 'astro/config';
 
 import react from '@astrojs/react';
@@ -11,6 +12,12 @@ import rehypeKatex from 'rehype-katex';
 // https://astro.build/config
 export default defineConfig({
     site: 'https://tashikarashisa.com',
+    output: 'static',
+    adapter: vercel({
+        webAnalytics: {
+            enabled: true,
+        },
+    }),
     markdown: {
         remarkPlugins: [remarkMath],
         rehypePlugins: [rehypeKatex],
