@@ -227,6 +227,52 @@ const entries: L6Entry[] = ([
 			},
 		],
 	},
+	{
+		episode: 8,
+		slug: 'hft-good-or-bad',
+		topic: '市場マイクロストラクチャ・HFT 論争',
+		heading: '15 年の論争地図',
+		intro:
+			'Flash Crash 2010 以降、HFT は "善か悪か" を学術的に問われ続けてきた。擁護側は流動性・価格発見の改善を実証、批判側はアームズ・レースの外部性と大口注文の front-running を指摘。15 年経ってもコンセンサスは出ていない。計量問題と反事実の難しさが、この分野の中心的な論点。',
+		refs: [
+			{
+				cite: 'CFTC-SEC (2010) "Findings Regarding the Market Events of May 6, 2010"',
+				note: 'Flash Crash 公式報告。HFT は "引き金" ではなく "増幅器" だったという公式見解。',
+			},
+			{
+				cite: 'Hendershott, Jones & Menkveld (2011) "Does Algorithmic Trading Improve Liquidity?" (JF)',
+				note: 'NYSE Autoquote を自然実験に使い、AT 増加→スプレッド縮小の因果効果を示した擁護側の金字塔。',
+			},
+			{
+				cite: 'Brogaard, Hendershott & Riordan (2014) "High-Frequency Trading and Price Discovery" (RFS)',
+				note: 'HFT は価格発見にネットでプラス寄与、特にアグレッシブ注文で顕著。',
+			},
+			{
+				cite: 'Budish, Cramton & Shim (2015) "The High-Frequency Trading Arms Race" (QJE)',
+				note: '連続時間市場は構造的にレイテンシ・アービトラージを生む。Frequent Batch Auctions への移行提案。批判側の金字塔。',
+			},
+			{
+				cite: 'Biais, Foucault & Moinas (2015) "Equilibrium Fast Trading" (JFE)',
+				note: '理論モデルで、HFT 技術投資は社会的に過剰になることを示す。',
+			},
+			{
+				cite: 'Baron, Brogaard, Hagströmer & Kirilenko (2019) "Risk and Return in High-Frequency Trading" (JFQA)',
+				note: 'アグレッシブ HFT のシャープレシオは年率約 10 以上、他投資家への情報的課税という解釈を支持。',
+			},
+			{
+				cite: 'Van Kervel & Menkveld (2019) "High-Frequency Trading around Large Institutional Orders" (JF)',
+				note: 'HFT は機関投資家の大口注文を検出して同方向に取り、執行コストを 0.4-0.9 bp 押し上げる。',
+			},
+			{
+				cite: 'SEC (2014) "Equity Market Structure Literature Review Part II: High-Frequency Trading"',
+				note: '米国 SEC による公的文献レビュー。HFT 定義と研究動向のまとまった俯瞰。',
+			},
+			{
+				cite: 'Kim & Hansen (2026) "The Quarter-Hour Effect..." (arXiv:2607.09426)',
+				note: '周期的アルゴ執行とリターン予測可能性、暗号資産先物での実証。トレーダー識別と板情報の 2 つの限界を今後の拡張ポイントに。筆者が現在この方向で研究中。',
+			},
+		],
+	},
 ] as L6Entry[]).sort((a, b) => a.episode - b.episode);
 ---
 
