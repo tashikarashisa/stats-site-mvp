@@ -11,7 +11,7 @@ const posts = (await getCollection('blog')).sort(
 );
 
 // シリーズのメタ情報（手動キュレーション、連載構造を可視化するため）
-type AxisKind = 'money' | 'intuition';
+type AxisKind = 'money' | 'intuition' | 'research';
 type SeriesMeta = {
 	episode: number;
 	axis: AxisKind;
@@ -27,6 +27,7 @@ const seriesMeta: Record<string, SeriesMeta> = {
 	'mortgage-math':    { episode: 5, axis: 'money',     shortTitle: '住宅ローン',       keyConcept: 'オプション売り・金利サイクル',   punchline: '35年で1,300万円' },
 	'index-investing':  { episode: 6, axis: 'money',     shortTitle: 'インデックス投資', keyConcept: 'EMH・ドルコスト・集中投資',    punchline: '新NISAで1.2億は本当？' },
 	'monte-carlo':      { episode: 7, axis: 'intuition', shortTitle: 'モンテカルロ法',   keyConcept: '実装・乱数で確率を解く',       punchline: '10行で確率を手に取る' },
+	'hft-good-or-bad':  { episode: 8, axis: 'research',  shortTitle: 'HFT 善か悪か',     keyConcept: '市場マイクロストラクチャ・15年',  punchline: '論点の精密化' },
 };
 
 const episodes = posts
@@ -36,6 +37,7 @@ const episodes = posts
 
 const moneyEpisodes = episodes.filter((e) => e.meta.axis === 'money');
 const intuitionEpisodes = episodes.filter((e) => e.meta.axis === 'intuition');
+const researchEpisodes = episodes.filter((e) => e.meta.axis === 'research');
 ---
 
 <!doctype html>
@@ -100,7 +102,7 @@ const intuitionEpisodes = episodes.filter((e) => e.meta.axis === 'intuition');
 			/* === Series Matrix === */
 			.matrix {
 				display: grid;
-				grid-template-columns: 1fr 1fr;
+				grid-template-columns: 1fr 1fr 1fr;
 				gap: 1em;
 			}
 			.matrix-cell {
@@ -112,6 +114,9 @@ const intuitionEpisodes = episodes.filter((e) => e.meta.axis === 'intuition');
 			.matrix-cell.intuition {
 				border-top-color: #4a9;
 			}
+			.matrix-cell.research {
+				border-top-color: #6b57b8;
+			}
 			.matrix-axis-label {
 				color: #c05621;
 				font-size: 0.85rem;
@@ -121,6 +126,9 @@ const intuitionEpisodes = episodes.filter((e) => e.meta.axis === 'intuition');
 			}
 			.matrix-cell.intuition .matrix-axis-label {
 				color: #4a9;
+			}
+			.matrix-cell.research .matrix-axis-label {
+				color: #6b57b8;
 			}
 			.matrix-axis-title {
 				font-size: 1.1rem;
@@ -197,6 +205,10 @@ const intuitionEpisodes = episodes.filter((e) => e.meta.axis === 'intuition');
 			.card-badge.intuition {
 				color: #4a9;
 				background: #e5f2ee;
+			}
+			.card-badge.research {
+				color: #6b57b8;
+				background: #ebe6f5;
 			}
 			.card-title {
 				font-size: 1rem;
@@ -286,7 +298,7 @@ const intuitionEpisodes = episodes.filter((e) => e.meta.axis === 'intuition');
 				text-decoration: underline;
 			}
 
-			@media (max-width: 600px) {
+			@media (max-width: 900px) {
 				.matrix {
 					grid-template-columns: 1fr;
 				}
@@ -317,9 +329,10 @@ const intuitionEpisodes = episodes.filter((e) => e.meta.axis === 'intuition');
 			<section>
 				<h2>連載の全体像</h2>
 				<p class="section-intro">
-					2 つの縦筋が交互に降りていきます。
-					<strong style="color: #c05621;">「お金」</strong>（日常の意思決定を数学で解く）と、
-					<strong style="color: #4a9;">「直感の罠」</strong>（確率が直感を裏切る瞬間）。
+					3 つの縦筋が交互に降りていきます。
+					<strong style="color: #c05621;">「お金」</strong>（日常の意思決定を数学で解く）、
+					<strong style="color: #4a9;">「直感の罠」</strong>（確率が直感を裏切る瞬間）、
+					<strong style="color: #6b57b8;">「研究の最前線」</strong>（本業領域から学術論点を）。
 				</p>
 				<div class="matrix">
 					<div class="matrix-cell">
@@ -352,6 +365,21 @@ const intuitionEpisodes = episodes.filter((e) => e.meta.axis === 'intuition');
 							))}
 						</ul>
 					</div>
+					<div class="matrix-cell research">
+						<div class="matrix-axis-label">AXIS 3</div>
+						<div class="matrix-axis-title">研究の最前線</div>
+						<ul class="matrix-list">
+							{researchEpisodes.map((e) => (
+								<li>
+									<a href={`/blog/${e.post.id}/`}>
+										<span class="ep">#{e.meta.episode}</span>
+										{e.meta.shortTitle}
+										<span style="color: #aaa; font-size: 0.8rem; margin-left: 0.4em;">{e.meta.punchline}</span>
+									</a>
+								</li>
+							))}
+						</ul>
+					</div>
 				</div>
 			</section>
 
@@ -366,7 +394,7 @@ const intuitionEpisodes = episodes.filter((e) => e.meta.axis === 'intuition');
 							)}
 							<div class="card-body">
 								<span class={`card-badge ${e.meta.axis}`}>
-									#{e.meta.episode} {e.meta.axis === 'money' ? 'お金' : '直感の罠'}
+									#{e.meta.episode} {e.meta.axis === 'money' ? 'お金' : e.meta.axis === 'intuition' ? '直感の罠' : '研究'}
 								</span>
 								<h3 class="card-title">{e.post.data.title}</h3>
 								<p class="card-concept">キー概念：{e.meta.keyConcept}</p>
