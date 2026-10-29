@@ -122,6 +122,79 @@ hr {
 	}
 }
 
+/* === Blog article vertical rhythm (scoped to .prose) ===
+   global.css のデフォルトでは h2/h3/table/pre/ul 等に top margin が無く、
+   table 直後の見出しや、コードブロック直後の段落が窮屈に見える。.prose
+   内に限って一貫した縦リズムを与える。
+*/
+.prose h2 {
+	margin-top: 2.4em;
+	margin-bottom: 0.7em;
+}
+.prose h3 {
+	margin-top: 1.8em;
+	margin-bottom: 0.5em;
+}
+.prose h4 {
+	margin-top: 1.4em;
+	margin-bottom: 0.4em;
+}
+.prose h5 {
+	margin-top: 1.2em;
+	margin-bottom: 0.3em;
+}
+.prose table {
+	margin: 1.6em 0;
+	border-collapse: collapse;
+	font-size: 0.95em;
+}
+.prose table th,
+.prose table td {
+	padding: 0.5em 0.8em;
+	border-bottom: 1px solid rgb(var(--gray-light));
+	text-align: left;
+	vertical-align: top;
+}
+.prose table th {
+	font-weight: 700;
+	border-bottom: 2px solid rgb(var(--gray));
+	background: rgba(var(--gray-light), 0.4);
+}
+.prose pre {
+	margin: 1.6em 0;
+}
+.prose ul,
+.prose ol {
+	margin: 1em 0 1.4em;
+	padding-left: 1.6em;
+}
+.prose ul li,
+.prose ol li {
+	margin-bottom: 0.35em;
+}
+.prose ul ul,
+.prose ol ol,
+.prose ul ol,
+.prose ol ul {
+	margin: 0.4em 0 0.4em;
+}
+.prose blockquote {
+	margin: 1.6em 0;
+}
+.prose hr {
+	margin: 2.2em 0;
+}
+.prose img {
+	margin: 1.4em auto;
+	display: block;
+}
+/* 見出し直後の見出しは余白を詰める（例：h2 → h3） */
+.prose h2 + h3,
+.prose h3 + h4,
+.prose h4 + h5 {
+	margin-top: 0.6em;
+}
+
 .sr-only {
 	border: 0;
 	padding: 0;
