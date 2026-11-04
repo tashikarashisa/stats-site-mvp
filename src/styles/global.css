@@ -194,6 +194,15 @@ hr {
 	margin-top: 0.6em;
 }
 
+/* === KaTeX 添え字（subscript/superscript）を少し小さく・下げる ===
+   KaTeX デフォルトの subscript は 0.7em（size3）で、日本語本文に混ざると
+   subscript 感が弱く見える。0.65em 相当に下げて視認性を上げる。
+   「script の script」が多段で過剰に縮まないよう mtight 内はさらに制御。
+*/
+.prose .katex .sizing.reset-size6.size3 {
+	font-size: 0.62em;
+}
+
 .sr-only {
 	border: 0;
 	padding: 0;
