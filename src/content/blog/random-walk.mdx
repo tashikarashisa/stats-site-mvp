@@ -27,13 +27,13 @@ import NoteCTA from '../../components/NoteCTA.astro';
 
 ### ランダム・ウォーク仮説のモデル
 
-株価 *P*<sub>*t*</sub> の対数リターン *r*<sub>*t*</sub> = log(*P*<sub>*t*</sub> / *P*<sub>*t*−1</sub>) について：
+株価 $P_t$ の対数リターン $r_t = \log(P_t / P_{t-1})$ について：
 
 $$
 r_t = \mu + \epsilon_t, \quad \epsilon_t \sim \text{i.i.d. with } E[\epsilon_t] = 0
 $$
 
-つまり、**各期間のリターンは独立同一分布**（i.i.d.）で、ドリフト *μ* 以外に **予測可能な成分はない**。これが完全なランダム・ウォークです。
+つまり、**各期間のリターンは独立同一分布**（i.i.d.）で、ドリフト $\mu$ 以外に **予測可能な成分はない**。これが完全なランダム・ウォークです。
 
 ---
 
@@ -101,7 +101,7 @@ Malkiel の *"A Random Walk Down Wall Street"*（1973 年初版、現在第 13 �
 
 1988 年、**Andrew W. Lo** と **A. Craig MacKinlay** が、*Review of Financial Studies* に *"Stock Market Prices Do Not Follow Random Walks: Evidence from a Simple Specification Test"* を発表。
 
-**核心のアイデア**：ランダム・ウォークなら、*k* 期間のリターンの分散は 1 期間リターンの分散の *k* 倍になるはず（独立性より）：
+**核心のアイデア**：ランダム・ウォークなら、$k$ 期間のリターンの分散は 1 期間リターンの分散の $k$ 倍になるはず（独立性より）：
 
 $$
 \text{Var}(r_t + r_{t+1} + \cdots + r_{t+k-1}) = k \cdot \text{Var}(r_t)
