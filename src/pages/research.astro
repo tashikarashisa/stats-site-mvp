@@ -273,6 +273,60 @@ const entries: L6Entry[] = ([
 			},
 		],
 	},
+	{
+		episode: 9,
+		slug: 'random-walk',
+		topic: 'ランダム・ウォーク仮説・EMH・AMH',
+		heading: '100 年の論争史',
+		intro:
+			'1900 年 Bachelier のブラウン運動モデルから、1970 年 Fama の効率的市場仮説、1988 年 Lo & MacKinlay による統計的棄却、2004 年 Lo の Adaptive Markets Hypothesis まで。「株価は本当に予測できないのか」という古くて新しい問いの、100 年の論争史。',
+		refs: [
+			{
+				cite: 'Bachelier (1900) Théorie de la spéculation',
+				note: 'パリ大学博士論文（指導 Poincaré）。株価にブラウン運動を当てた最初の論文。アインシュタイン 1905 より 5 年早い。',
+			},
+			{
+				cite: 'Kendall (1953) "The Analysis of Economic Time Series" (JRSS)',
+				note: '英国の株価 22 系列と商品価格 2 系列を調べ、週次変化率に自己相関がないことを実証した先行研究。',
+			},
+			{
+				cite: 'Samuelson (1965) "Proof that Properly Anticipated Prices Fluctuate Randomly" (IMR)',
+				note: '情報が完全に反映されるなら価格はマルチンゲールになる、という定理。ランダム・ウォーク仮説の現代的定式化。',
+			},
+			{
+				cite: 'Fama (1970) "Efficient Capital Markets: A Review" (JF)',
+				note: 'EMH を Weak / Semi-strong / Strong の 3 階層に整理した金字塔。金融経済学の中心仮説を確立。',
+			},
+			{
+				cite: 'Shiller (1981) "Do Stock Prices Move Too Much..." (AER)',
+				note: '株価の変動は配当の変動では説明できないほど大きい。市場は非効率、という古典的 EMH 批判。',
+			},
+			{
+				cite: 'De Bondt & Thaler (1985) "Does the Stock Market Overreact?" (JF)',
+				note: '長期リバーサル。過去 3-5 年の敗者株が次の 3-5 年で勝者株を逆転するという実証。',
+			},
+			{
+				cite: 'Lo & MacKinlay (1988) "Stock Market Prices Do Not Follow Random Walks" (RFS)',
+				note: '分散比検定でランダム・ウォーク仮説を統計的に棄却。EMH 支持層に大きな衝撃を与えた論文。',
+			},
+			{
+				cite: 'Jegadeesh & Titman (1993) "Returns to Buying Winners and Selling Losers" (JF)',
+				note: 'モメンタム効果。過去 3-12 ヶ月好調な株は次の 3-12 ヶ月も好調。EMH の重要な反証。',
+			},
+			{
+				cite: 'Fama & French (1993) "Common Risk Factors..." (JFE)',
+				note: '市場、サイズ、バリューの 3 ファクターモデル。EMH を保ちつつアノマリーをリスクプレミアムで説明する試み。',
+			},
+			{
+				cite: 'Lo (2004) "The Adaptive Markets Hypothesis" (JPM)',
+				note: 'EMH と行動ファイナンスを進化論的視点で統合。市場効率性は環境に応じて変動する条件付きの程度問題、というパラダイム。',
+			},
+			{
+				cite: 'Lo (2017) Adaptive Markets: Financial Evolution at the Speed of Thought',
+				note: 'AMH を包括的に展開した一般向け書籍。現代の高頻度データで何が見えているか、までを扱う。',
+			},
+		],
+	},
 ] as L6Entry[]).sort((a, b) => a.episode - b.episode);
 ---
 

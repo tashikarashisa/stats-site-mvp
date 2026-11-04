@@ -1,0 +1,236 @@
+---
+title: 'ランダム・ウォーク仮説 ─ 株価は本当に予測できないのか'
+description: '1900 年 Bachelier のブラウン運動モデル、1970 年 Fama の効率的市場仮説、1988 年 Lo & MacKinlay の反証、2004 年 Adaptive Markets Hypothesis ─ 100 年の論争史を 6 階層で辿る。研究コラム路線 2 本目。'
+pubDate: 'Nov 7 2026'
+ogImage: '/og/random-walk.png'
+---
+
+import NoteCTA from '../../components/NoteCTA.astro';
+
+[W6 インデックス投資](/blog/index-investing/) で Fama の効率的市場仮説（EMH）と Malkiel『ランダム・ウォーク』を引用し、[W8 HFT](/blog/hft-good-or-bad/) で 15 年の HFT・価格発見の論争を見ました。今回は、この 2 本の背骨にある **「株価は本当に予測できないのか」** という、**100 年続く古くて新しい問い** を正面から扱います。
+
+結論から言うと、**完全なランダム・ウォークは、1988 年に Lo & MacKinlay によって統計的に棄却されました**。でも「だから株価は予測できる」とは単純にならない。短期の予測可能性と長期の効率性は両立しうる ── これが現代の論点です。
+
+今回は、1900 年の若きフランス数学者 Bachelier から始まり、Samuelson、Fama、Lo & MacKinlay、そして現代の Adaptive Markets Hypothesis まで、**100 年の論争史** を 6 階層で辿ります。研究コラム路線（AXIS 3「研究の最前線」）の 2 本目。
+
+---
+
+## L1｜「株価は予測できるか？」という問い
+
+テレビで「今日の日経平均は前日比 200 円安」と報じられると、多くの人は「明日はどうなるのか」と考えます。チャートを眺めると、山と谷、トレンドとレンジ、見えてくる "パターン" らしきもの。**テクニカル分析** は、過去の価格の形から将来を予測しようとする技法の総称です。
+
+しかし、こんなシンプルな疑問もあります：
+
+> **もし過去の価格から明日の株価が予測できるなら、その情報を知っている全員が同じ方向に賭けるはず。そうすると、その時点でもう価格は動いてしまう。**
+
+つまり、**「予測可能性」自体が予測を打ち消す** という自己言及的な構造が、市場には組み込まれている。この洞察を数学的に定式化したのが、**ランダム・ウォーク仮説**（Random Walk Hypothesis）と、その後の **効率的市場仮説**（Efficient Market Hypothesis, EMH）です。
+
+### ランダム・ウォーク仮説のモデル
+
+株価 $P_t$ の対数リターン $r_t = \log(P_t / P_{t-1})$ について：
+
+$$r_t = \mu + \epsilon_t, \quad \epsilon_t \sim \text{i.i.d. with } E[\epsilon_t] = 0$$
+
+つまり、**各期間のリターンは独立同一分布**（i.i.d.）で、ドリフト $\mu$ 以外に **予測可能な成分はない**。これが完全なランダム・ウォークです。
+
+---
+
+## L2｜Bachelier 1900 ─ ブラウン運動の発見、経済学から
+
+### 若き数学者と博士論文
+
+**Louis Bachelier**（1870-1946）はフランスの数学者。1900 年、パリ大学で博士論文 *Théorie de la spéculation*（投機の理論）を提出しました。指導教員は **Henri Poincaré**。
+
+この論文で Bachelier は、**パリ証券取引所のフランス国債先物の価格変動** に、**ブラウン運動**（Brownian Motion, Wiener process）のモデルを適用しました。株価変動を：
+
+$$dP_t = \sigma \, dW_t$$
+
+という、現代なら誰でも書く確率微分方程式で捉えた。問題はひとつ ── **これは 1900 年の話** です。
+
+- **アインシュタインがブラウン運動の物理学的解釈を発表するのは 1905 年**（Bachelier より 5 年後）
+- **Wiener process の数学的構成は 1923 年**（Norbert Wiener）
+- **Black-Scholes の 1973 年のオプション価格評価論文は、Bachelier の 73 年後**
+
+Bachelier の論文には、Black-Scholes の **ほぼ完全なオプション価格評価の原型** が含まれています。しかし、博士論文の評価は "mention honorable"（**「可」程度**）。大学ポストもなかなか得られず、金融数学と純粋数学のはざまで無視されました。
+
+### 再発見
+
+1960 年代、**Paul Samuelson** が Bachelier の論文を再発見。1965 年の論文 *"Proof that Properly Anticipated Prices Fluctuate Randomly"* で、**「情報が完全に反映されるなら、価格はマルチンゲールになる」** という定理を証明します。これがランダム・ウォーク仮説の **現代的な定式化** です。
+
+---
+
+## L3｜Fama 1970 ─ 効率的市場仮説（EMH）の確立
+
+### Kendall 1953 の先行研究
+
+Bachelier と Samuelson の間に、**Maurice Kendall** が 1953 年に *"The Analysis of Economic Time Series"*（JRSS）で、英国の **22 の株価指数と 2 つの商品価格** の週次変動を分析。結論：
+
+> **変化率の間に自己相関は見られない。各週のリターンは独立であるかのように振る舞う。**
+
+これが実証面での最初の決定的証拠でした。
+
+### Fama の 3 階層
+
+**Eugene Fama** は 1965 年の博士論文、そして 1970 年の *"Efficient Capital Markets: A Review of Theory and Empirical Work"*（JF）で、EMH を **3 つの強度** に整理：
+
+| 効率性のレベル | 反映する情報 | 意味 |
+|---|---|---|
+| **Weak form**（弱効率） | 過去の価格・取引量 | **テクニカル分析では超過リターンは得られない** |
+| **Semi-strong form**（準強効率） | 公開されたすべての情報 | **ファンダメンタル分析でも超過リターンは得られない** |
+| **Strong form**（強効率） | 内部情報も含めた全情報 | **インサイダー取引でも超過リターンは得られない** |
+
+### 当時の実証
+
+1970 年代前半までの実証研究は、**Weak form と Semi-strong form を概ね支持** する結果が多く、EMH は **金融経済学の中心仮説** として定着しました。
+
+- 過去の価格から超過リターンを得る戦略はほぼ機能しない
+- 決算発表直後の株価反応は、ほぼ即座に起こる
+- ミューチュアルファンドの平均リターンは、インデックスをアクティブに上回れない
+
+Malkiel の *"A Random Walk Down Wall Street"*（1973 年初版、現在第 13 版）は、この EMH の一般向け啓蒙書。「**インデックスファンドを長期保有せよ**」というメッセージは、現代の積立投資ブームの理論的バックボーンです（[W6 インデックス投資](/blog/index-investing/) を参照）。
+
+---
+
+## L4｜Lo & MacKinlay 1988 ─ 統計的な反証
+
+### 分散比検定（Variance Ratio Test）
+
+1988 年、**Andrew W. Lo** と **A. Craig MacKinlay** が、*Review of Financial Studies* に *"Stock Market Prices Do Not Follow Random Walks: Evidence from a Simple Specification Test"* を発表。
+
+**核心のアイデア**：ランダム・ウォークなら、$k$ 期間のリターンの分散は 1 期間リターンの分散の $k$ 倍になるはず（独立性より）：
+
+$$\text{Var}(r_t + r_{t+1} + \cdots + r_{t+k-1}) = k \cdot \text{Var}(r_t)$$
+
+したがって **分散比**（Variance Ratio, VR）：
+
+$$VR(k) = \frac{\text{Var}(k\text{-期間リターン})}{k \cdot \text{Var}(1\text{-期間リターン})}$$
+
+は、**ランダム・ウォークなら 1 に等しい**。実データで VR が 1 から統計的に有意に離れていれば、ランダム・ウォークは棄却される。
+
+### 結果
+
+1962-1985 年の CRSP 週次データ（NYSE 全銘柄）で：
+
+- **VR(2) ≈ 1.20〜1.30**、VR(4) ≈ 1.40〜1.60、VR(8) ≈ 1.60〜1.90
+- **週次リターンに有意な正の自己相関**（小型株でより顕著）
+- ランダム・ウォーク仮説を **統計的に棄却**
+
+これは **EMH 支持層に大きな衝撃** を与えました。「ランダム・ウォークではない」が実証されたのです。
+
+### 他の反証：モメンタムと長期リバーサル
+
+Lo & MacKinlay 以降、数々の「アノマリー」が発見されました：
+
+- **Jegadeesh & Titman (1993)**：**モメンタム効果** ─ 過去 3-12 ヶ月好調だった株は、その後 3-12 ヶ月も好調。過去のリターンから将来を予測できる
+- **De Bondt & Thaler (1985)**：**長期リバーサル** ─ 過去 3-5 年の敗者株は、次の 3-5 年で勝者株を逆転する
+- **Shiller (1981)**：**過剰変動** ─ 株価の変動は、配当の変動から予測される水準を大きく超える（市場は非効率）
+- **Fama & French (1993)**：3 ファクターモデル（市場、サイズ、バリュー） ─ EMH を保ちつつ超過リターンを説明
+
+**注意**：これらの「反証」は、**市場が完全にランダムではない** ことを示すが、**「予測して儲けられる」ことは別の話**。トランザクションコスト、リスクプレミアム、分布の非正規性、サンプルサイズ問題で、実装上の利ざやは消えがちです。
+
+---
+
+## L5｜ランダム・ウォークと行動ファイナンス
+
+### 市場参加者は合理的ではない
+
+EMH の暗黙の前提は、「市場参加者は情報を合理的に処理する」。しかし **Kahneman & Tversky (1979)** の *"Prospect Theory"*（Econometrica）は、人間の意思決定が **予測可能なバイアス** を持つことを示しました：
+
+- **損失回避**（loss aversion）：同額の利益より損失を強く感じる
+- **確率加重**：低確率事象を過大評価、高確率事象を過小評価
+- **参照点依存**：絶対水準ではなく変化で評価する
+- **アンカリング**：最初に見た数字に引きずられる
+
+### Shiller の問いかけ
+
+**Robert Shiller** は 1981 年論文で「株価の変動は、配当の将来変動では説明できないほど大きい」ことを示し、*"Irrational Exuberance"*（2000）で **市場バブル** を予見しました。
+
+Shiller の CAPE（Cyclically Adjusted PE Ratio）は、**長期的な株価リターンの予測可能性** を示す指標として広く使われています。EMH に反して、**10 年単位の将来リターンは、現在の CAPE からある程度予測できる**。
+
+### 行動ファイナンスの示唆
+
+- 短期的には、トレーダーの認知バイアスで価格が歪む
+- 長期的には、鞘取り（アービトラージ）で歪みが矯正されていく
+- **しかし、鞘取りには限界がある**（De Long et al. 1990 "Noise Trader Risk"）
+
+ランダム・ウォーク vs 予測可能性の論争は、**市場合理性 vs 人間非合理性** の論争と同じ構造を持っていた、ということです。
+
+---
+
+## L6｜研究者コラム：Adaptive Markets Hypothesis（Lo 2004）
+
+<a id="l6"></a>
+
+### 「進化する市場」という発想
+
+Lo & MacKinlay で EMH を棄却した **Andrew Lo** は、2004 年に *"The Adaptive Markets Hypothesis: Market Efficiency from an Evolutionary Perspective"*（Journal of Portfolio Management）で、**EMH と行動ファイナンスを統合する枠組み** を提案しました。
+
+**Adaptive Markets Hypothesis（AMH）** の中核：
+
+> **市場の効率性は定数ではなく、環境に応じて変動する。参加者は合理的でも完全にバイアスだらけでもなく、進化的に適応する存在である。**
+
+具体的には：
+
+- **市場環境**（参加者構成、技術、規制、ボラティリティ）が変わると、どの戦略が利益をもたらすかが変わる
+- **参加者** は限定合理性（bounded rationality）とヒューリスティクスで動き、環境に適応する
+- **効率性** は "ある / ない" の二値ではなく、**条件付きの程度問題**
+- **アノマリー** は定常ではない。ある時代に有効だった戦略が、別の時代には機能しない
+
+### 実証的な裏付け
+
+- **Kim, Shamsuddin & Lim (2011)** *"Stock return predictability and the adaptive markets hypothesis"*（JEF）: 米国株の時間変動する予測可能性を示す
+- **Urquhart & Hudson (2013)** *"Efficient or adaptive markets?"*（IRFA）：ランダム・ウォークの棄却度合いは時代により大きく変わる
+- **Lo (2017)** *"Adaptive Markets: Financial Evolution at the Speed of Thought"*：一般向け書籍で AMH を包括的に展開
+
+### 現代の視点：高頻度データで何が見えるか
+
+21 世紀の研究は、**ミリ秒・マイクロ秒単位** のデータで、ランダム・ウォーク仮説の **新しい層** を探っています：
+
+- **短期自己相関**（数秒〜数分）：マイクロストラクチャ由来（bid-ask bounce、disposition effect）
+- **日中周期性**：執行アルゴの時刻依存（[W8](/blog/hft-good-or-bad/) で触れた Quarter-Hour Effect, Kim & Hansen 2026）
+- **イベント周辺の予測可能性**：決算発表、マクロ指標、FOMC 前後
+
+**これらは EMH を棄却するのか？** 答えは AMH 的：「**ある時間スケールでは Yes、別のスケールでは No**」。短期の微細な予測可能性は、実装コスト（取引コスト、インフラ投資）を上回れば利ざやになるし、上回らなければアノマリーとして観察されるだけ、です。
+
+### 学術文献（既発表のみ）
+
+- **Bachelier (1900)** *Théorie de la spéculation* ─ ブラウン運動を株価に当てた最初の論文
+- **Kendall (1953)** *"The Analysis of Economic Time Series"* (JRSS) ─ 実証面での最初の決定的証拠
+- **Samuelson (1965)** *"Proof that Properly Anticipated Prices Fluctuate Randomly"* (IMR) ─ 情報完全反映ならマルチンゲール
+- **Fama (1970)** *"Efficient Capital Markets: A Review of Theory and Empirical Work"* (JF) ─ EMH の 3 階層整理、金字塔
+- **Shiller (1981)** *"Do Stock Prices Move Too Much to be Justified by Subsequent Changes in Dividends?"* (AER) ─ 過剰変動
+- **De Bondt & Thaler (1985)** *"Does the Stock Market Overreact?"* (JF) ─ 長期リバーサル
+- **Lo & MacKinlay (1988)** *"Stock Market Prices Do Not Follow Random Walks"* (RFS) ─ ランダム・ウォーク棄却
+- **Jegadeesh & Titman (1993)** *"Returns to Buying Winners and Selling Losers"* (JF) ─ モメンタム効果
+- **Fama & French (1993)** *"Common Risk Factors in the Returns on Stocks and Bonds"* (JFE) ─ 3 ファクターモデル
+- **Lo (2004)** *"The Adaptive Markets Hypothesis"* (JPM) ─ EMH と行動ファイナンスの統合
+- **Lo (2017)** *Adaptive Markets: Financial Evolution at the Speed of Thought* ─ 一般向け
+- **Malkiel** *A Random Walk Down Wall Street* ─ インデックス投資の啓蒙古典
+
+---
+
+## おわりに
+
+100 年の論争史を駆け足で辿ってきました：
+
+- **1900**：Bachelier、株価にブラウン運動モデル（**半世紀無視される**）
+- **1953-1970**：Kendall、Samuelson、Fama ─ **ランダム・ウォーク仮説と EMH** の確立
+- **1981-1988**：Shiller、De Bondt、Lo & MacKinlay ─ **過剰変動、長期リバーサル、ランダム・ウォーク棄却**
+- **1979-2000**：Kahneman、Shiller ─ **行動ファイナンス** の登場
+- **2004-現在**：Lo ─ **Adaptive Markets Hypothesis**、EMH と行動ファイナンスの統合
+
+今回の持ち帰り：
+
+> **株価は、完全にランダムではないが、簡単に予測できるわけでもない。市場の効率性は環境に応じて変動する "進化するシステム" で、短期の予測可能性と長期の効率性は両立しうる。**
+
+[W6 インデックス投資](/blog/index-investing/) で「インデックス積立必勝」の数学的根拠を見たとき、その背骨にあったのは Fama の EMH です。**弱効率** が成立するなら、個人がテクニカル分析で平均以上のリターンを得るのは至難。しかし **AMH** を踏まえると、「効率性は時代・銘柄・時間スケールで変動する」という留保がつきます。
+
+**Malkiel『ランダム・ウォーク』の結論は、まだ生きている。でも、それは「絶対的真理」ではなく、「多くの環境で成立する条件付き真理」である**  ── これが、100 年の論争の現在地です。
+
+次回は、研究コラム路線の 3 本目として：
+
+**W10：ベイズ推論と P 値 ─ 統計検定、どちらが正しい？**
+
+を予定しています。「どっちが正しいか」ではなく「どういうときにどちらを使うか」。統計学者が本気で割れる論点を、入門者にも読める形でまとめます。
+
+<NoteCTA noteUrl="/go/note-w9" eventName="w9_note_cta" />
