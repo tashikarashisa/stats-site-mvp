@@ -194,49 +194,6 @@ hr {
 	margin-top: 0.6em;
 }
 
-/* === KaTeX 下付き・上付き文字の表示を確実に ===
-   Vite/CSS 最適化や他スタイルの影響で subscript が崩れることが報告されたため、
-   必須の positioning ルールを明示。KaTeX の native rule と同じ値を !important で再宣言。
-*/
-.prose .katex .msupsub {
-	text-align: left !important;
-}
-.prose .katex .vlist-t {
-	display: inline-table !important;
-	table-layout: fixed !important;
-	border-collapse: collapse !important;
-}
-.prose .katex .vlist-r {
-	display: table-row !important;
-}
-.prose .katex .vlist {
-	display: table-cell !important;
-	vertical-align: bottom !important;
-	position: relative !important;
-}
-.prose .katex .vlist > span {
-	display: block !important;
-	height: 0 !important;
-	position: relative !important;
-}
-.prose .katex .vlist > span > span {
-	display: inline-block !important;
-}
-.prose .katex .vlist > span > .pstrut {
-	width: 0 !important;
-	overflow: hidden !important;
-}
-/* HTML <sub>/<sup> native tags (used as fallback for simple subscripts) */
-.prose sub,
-.prose sup {
-	font-size: 0.75em;
-	line-height: 0;
-	position: relative;
-	vertical-align: baseline;
-}
-.prose sub { bottom: -0.25em; }
-.prose sup { top: -0.5em; }
-
 .sr-only {
 	border: 0;
 	padding: 0;
