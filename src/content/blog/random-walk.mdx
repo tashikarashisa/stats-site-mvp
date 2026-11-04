@@ -29,7 +29,9 @@ import NoteCTA from '../../components/NoteCTA.astro';
 
 株価 *P*<sub>*t*</sub> の対数リターン *r*<sub>*t*</sub> = log(*P*<sub>*t*</sub> / *P*<sub>*t*−1</sub>) について：
 
-$$r_t = \mu + \epsilon_t, \quad \epsilon_t \sim \text{i.i.d. with } E[\epsilon_t] = 0$$
+$$
+r_t = \mu + \epsilon_t, \quad \epsilon_t \sim \text{i.i.d. with } E[\epsilon_t] = 0
+$$
 
 つまり、**各期間のリターンは独立同一分布**（i.i.d.）で、ドリフト *μ* 以外に **予測可能な成分はない**。これが完全なランダム・ウォークです。
 
@@ -43,7 +45,9 @@ $$r_t = \mu + \epsilon_t, \quad \epsilon_t \sim \text{i.i.d. with } E[\epsilon_t
 
 この論文で Bachelier は、**パリ証券取引所のフランス国債先物の価格変動** に、**ブラウン運動**（Brownian Motion, Wiener process）のモデルを適用しました。株価変動を：
 
-$$dP_t = \sigma \, dW_t$$
+$$
+dP_t = \sigma \, dW_t
+$$
 
 という、現代なら誰でも書く確率微分方程式で捉えた。問題はひとつ ── **これは 1900 年の話** です。
 
@@ -99,11 +103,15 @@ Malkiel の *"A Random Walk Down Wall Street"*（1973 年初版、現在第 13 �
 
 **核心のアイデア**：ランダム・ウォークなら、*k* 期間のリターンの分散は 1 期間リターンの分散の *k* 倍になるはず（独立性より）：
 
-$$\text{Var}(r_t + r_{t+1} + \cdots + r_{t+k-1}) = k \cdot \text{Var}(r_t)$$
+$$
+\text{Var}(r_t + r_{t+1} + \cdots + r_{t+k-1}) = k \cdot \text{Var}(r_t)
+$$
 
 したがって **分散比**（Variance Ratio, VR）：
 
-$$VR(k) = \frac{\text{Var}(k\text{-期間リターン})}{k \cdot \text{Var}(1\text{-期間リターン})}$$
+$$
+VR(k) = \frac{\text{Var}(k\text{-期間リターン})}{k \cdot \text{Var}(1\text{-期間リターン})}
+$$
 
 は、**ランダム・ウォークなら 1 に等しい**。実データで VR が 1 から統計的に有意に離れていれば、ランダム・ウォークは棄却される。
 
