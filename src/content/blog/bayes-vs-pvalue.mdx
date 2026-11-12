@@ -1,0 +1,285 @@
+---
+title: 'ベイズ推論と P 値 ─ 統計検定、どちらが正しい？'
+description: '20 世紀初頭 Fisher の P 値、Neyman-Pearson の仮説検定、Jeffreys のベイズ復権 ─ 100 年続く統計学の論争。2016 年 ASA 声明と再現性危機を経て、現代の統計学者は「どちらが正しい」ではなく「どういうときにどちらを使うか」で決着をつけている。研究コラム路線 3 本目。'
+pubDate: 'Nov 14 2026'
+ogImage: '/og/bayes-vs-pvalue.png'
+---
+
+import NoteCTA from '../../components/NoteCTA.astro';
+
+「薬の効果は統計的に有意だった」── この一文は、何を言っているのか？ **p < 0.05** という閾値はどこから来て、何を意味しているのか？ そして、**ベイズ推論** という別の枠組みは、同じ問いにどう答えるのか？
+
+今回は、**100 年続く統計学の論争** を扱います。20 世紀初頭に Ronald Fisher が P 値を広めてから、Neyman と Pearson が仮説検定を体系化し、Harold Jeffreys がベイズを復権させた。2016 年、米国統計学会（ASA）が異例の声明を出し、「p < 0.05 の機械的判定が科学を歪めている」と警告しました。
+
+結論から言うと、**「どちらが正しい」ではなく、「どういうときにどちらを使うか」** が現代の統計学者の答えです。研究コラム路線（AXIS 3「研究の最前線」）の 3 本目として、100 年の論争史と、現代の統合的な視点を 6 階層で辿ります。
+
+---
+
+## L1｜統計検定の身近な例
+
+薬の臨床試験で、新薬群と対照群（プラセボ）を比較して、「新薬の方が血圧を 5 mmHg 下げた、p 値は 0.02」と報告される。多くの医学論文は **p < 0.05 なら「統計的に有意」、新薬は効く** と結論します。
+
+しかしこの判定、よく考えると不思議な構造を持っています：
+
+> **p 値 0.02 とは、「本当は効かないと仮定したときに、観測以上の差が偶然出る確率」のこと。**
+> **「新薬が効く確率」でも「帰無仮説が正しい確率」でもない。**
+
+これが、統計学を学ぶ全員が一度は混乱する、P 値の反転問題です。
+
+### もう一つの立場：ベイズ推論
+
+同じデータを、別の問いで見直すこともできます：
+
+> **データを観察した後、「新薬が効く」仮説が正しい確率はいくつか？**
+
+これは **ベイズ推論** の問いです。**事前分布**（データを見る前の仮説の確率）に **尤度**（データが観察される確率）を掛け、**事後分布** を得る。「効く確率が 95%」と直接的に答えられる。
+
+**同じデータ**、**同じ問い** でも、使う枠組みで答え方が違う。これが 100 年続く論争の中心です。
+
+---
+
+## L2｜100 年の論争史
+
+### Fisher 1925 ─ P 値の普及
+
+**Ronald A. Fisher**（1890-1962）は、ロンドン大学 Rothamsted 農事試験場で農業実験の統計手法を整備。1925 年、*"Statistical Methods for Research Workers"* で **P 値** を実用的手法として普及させました。
+
+Fisher 自身は、p < 0.05 を **「注目に値する水準」** と位置付けただけで、**機械的な判定閾値として提案したわけではない**。しかし後世に、「p < 0.05 = 有意」が規範として定着します。
+
+### Neyman-Pearson 1933 ─ 仮説検定の体系化
+
+**Jerzy Neyman** と **Egon Pearson** は 1933 年、*"On the Problem of the Most Efficient Tests of Statistical Hypotheses"*（JRSS）で、**仮説検定** の体系を構築：
+
+- **帰無仮説 H₀** と **対立仮説 H₁** を立てる
+- **棄却域** を事前に決める
+- **第 1 種誤差**（α）：H₀ が正しいのに棄却する確率
+- **第 2 種誤差**（β）：H₁ が正しいのに H₀ を採択する確率
+- **検出力**（1−β）：H₁ が正しいとき正しく検出する確率
+
+Neyman-Pearson の枠組みは、工業品質管理・工学で広く使われます。Fisher と Neyman-Pearson は実は **哲学的に対立** していました（Fisher は帰納的推論、NP は決定論的）。しかし後世の教科書では両者が融合されて教えられ、現代の「P 値 + 仮説検定」の混合形式が生まれました。
+
+### Jeffreys 1939 ─ ベイズの復権
+
+**Harold Jeffreys** は 1939 年の *"Theory of Probability"* で、**ベイズ推論** を物理学・地球科学に適用する枠組みを再構築しました。
+
+当時、ベイズは「主観的すぎる」と批判されていました（事前分布の恣意性）。Jeffreys は **無情報事前分布**（Jeffreys prior）を提案し、「客観的なベイズ」の道を開きました。しかし、計算の困難さから、20 世紀中盤までベイズは少数派の立場に。
+
+### 1990 年代 ─ MCMC 革命
+
+[W7 モンテカルロ法](/blog/monte-carlo/) で見たように、**Markov Chain Monte Carlo（MCMC）** の普及で、複雑な事後分布のサンプリングが実用的になりました。1990 年代、Gibbs sampler, Metropolis-Hastings の実装が整い、**Stan, PyMC, JAGS** などのツールが研究者の必修に。ベイズは **計算面の制約から解放** されました。
+
+---
+
+## L3｜P 値の誤解と、"統計的有意" の罠
+
+P 値は、正しく解釈するのが難しい指標です。以下は、Wasserstein & Lazar (2016) *"The ASA Statement on p-Values"*（The American Statistician）が明確に禁じた **よくある誤解** です：
+
+### 誤解 1：「p < 0.05 なら帰無仮説は偽である」
+
+**違います**。P 値は「H₀ が正しいときの確率」であって、「H₀ が正しい確率」ではありません。条件付き確率を **反転** することはできない（これは [W3 モンティ・ホール](/blog/monty-hall/) で扱った条件付き確率の典型例）。
+
+### 誤解 2：「p < 0.05 なら効果は本物である」
+
+**違います**。p 値はあくまで統計的な数字で、効果の **大きさ**（effect size）や **実質的意味** を保証しません。n を十分に大きくすれば、どんなに小さな差でも p < 0.05 を達成できます。
+
+### 誤解 3：「p > 0.05 なら効果はない」
+
+**違います**。p 値が大きい = 「効果がないことを証明」ではありません。「十分な証拠が得られなかった」だけです。検出力不足かもしれません。
+
+### P-hacking ─ 統計的有意を "製造" する手法
+
+研究者が、以下のような操作で p 値を 0.05 未満に調整することを **P-hacking** と呼びます：
+
+- 複数の統計手法を試して、有意になるものを選ぶ
+- サンプルサイズを有意になるまで追加収集
+- 外れ値を除外する基準を事後に決める
+- 複数の変数を試して、有意なものだけ報告
+
+**Head et al. (2015)** *"The Extent and Consequences of P-Hacking in Science"*（PLOS Biology）は、学術論文の p 値分布を解析して、**0.05 直下に不自然なピーク** があることを実証しました。これは意図的・無意識的な P-hacking の痕跡です。
+
+### 再現性危機（Reproducibility Crisis）
+
+**Open Science Collaboration (2015)** *"Estimating the Reproducibility of Psychological Science"*（Science）は、心理学の有名論文 100 本を再現実験。結果、**約 36% しか元の p 値を再現できなかった**。医学・生命科学でも同様の問題が報告され、「**再現性危機**」が 2015 年以降、科学全体のテーマに。
+
+### 2016 年 ASA 声明
+
+American Statistical Association（米国統計学会）は 2016 年、**異例の公式声明** を発表：
+
+> **「p < 0.05 の機械的判定で科学的結論を導くことは、しばしば誤った結論を生み、良い科学的実践を妨げる」**
+
+ASA は、P 値を **「補助指標の 1 つ」** に格下げし、効果サイズ、信頼区間、事前知識、再現性、ベイズファクターなど **多面的な証拠** を併用することを推奨しました。
+
+---
+
+## L4｜ベイズ推論の仕組みと長所
+
+### ベイズの定理
+
+ベイズ推論の中核は、以下のシンプルな定理です：
+
+$$
+P(\theta \mid \text{data}) = \frac{P(\text{data} \mid \theta) \cdot P(\theta)}{P(\text{data})}
+$$
+
+ここで：
+- $P(\theta)$：**事前分布** ─ データを見る前のパラメータ $\theta$ の確率
+- $P(\text{data} \mid \theta)$：**尤度** ─ $\theta$ のもとでデータが観察される確率
+- $P(\theta \mid \text{data})$：**事後分布** ─ データを見た後のパラメータの確率
+- $P(\text{data})$：周辺尤度（正規化定数）
+
+### 直接的な解釈
+
+事後分布 $P(\theta \mid \text{data})$ は、**「データを観察した後、パラメータが取る確率」** という直接的な意味を持ちます。
+
+- 「新薬が効く確率は 94%」と直接言える
+- 95% **信用区間**（credible interval）：「真値がこの区間に入る確率が 95%」（信頼区間とは解釈が違う）
+- 複数の仮説の **事後確率比**（ベイズファクター）で比較できる
+
+### 事前分布の問題
+
+ベイズの最大の論点は、**事前分布をどう決めるか**。選択によって結論が変わる可能性がある。アプローチ：
+
+- **無情報事前分布**（Jeffreys prior、一様分布など）：なるべく客観的に
+- **弱情報事前分布**（weakly informative prior）：極端な値を除外する緩い制約
+- **主観的事前分布**：専門家の事前知識を反映
+
+Gelman et al. (2013) *"Bayesian Data Analysis"*（3rd ed.）は、「**弱情報事前**」を現代の標準として推奨しています。「完全に客観的」を目指すより、「合理的な範囲に制約する」方が実用的だ、という立場です。
+
+### 計算：MCMC とその後
+
+ベイズ推論の弱点は **計算コスト**。事後分布は一般に解析解が無く、数値計算が必要。
+
+- **MCMC**（Metropolis-Hastings, Gibbs, HMC = Hamiltonian Monte Carlo）：事後分布からサンプリング（[W7 モンテカルロ法](/blog/monte-carlo/) 参照）
+- **変分推論**（Variational Inference）：事後分布を近似する簡単な分布を最適化で求める。深層学習との親和性も高い
+- **Approximate Bayesian Computation（ABC）**：尤度が計算できない複雑モデル向け
+
+現代ツール：**Stan, PyMC, JAGS, NumPyro, TensorFlow Probability** などが研究者・実務家の標準。
+
+---
+
+## L5｜どちらを使うか ─ 業界別の実践
+
+「ベイズと P 値、どちらが正しい？」に対する現代統計学の答えは、**「問題と文脈次第」**。業界ごとの慣行を見ると、明確な傾向があります：
+
+### 医学・臨床試験：NHST（Null Hypothesis Significance Testing）が主流
+
+- FDA / EMA の承認プロセスでは、ランダム化比較試験の P 値 < 0.05（または 0.025）を主要指標に
+- 事前計画された仮説のみ検定（P-hacking 防止）
+- **Pocock boundary** などの逐次試験で α を厳しくする運用
+- ただし **Bayesian adaptive design** も近年増加（FDA guidance 2010 以降）
+
+### 素粒子物理：「5σ 基準」
+
+- Higgs boson 発見（2012）の判定基準は **5σ（p < 3×10⁻⁷）**
+- 医学より遥かに厳しい ─ 多重検定の母数が膨大なため
+- 事前分布の恣意性を避けるため、ベイズより頻度論を好む傾向
+
+### 計量経済学：混合
+
+- 伝統的には NHST（Student's t, F 検定）
+- しかし **Bayesian VAR, DSGE モデル** など、ベイズも定着
+- ノーベル経済学賞 Sims (2011) や Hamilton の教科書でベイズ章が標準
+
+### 機械学習：ベイズ寄り
+
+- Gaussian Process, Bayesian Neural Networks, Variational Autoencoders
+- **不確実性の定量化**（uncertainty quantification）が実用的に重要
+- しかし **ドロップアウト**（Gal & Ghahramani 2016）など、ベイズ近似を頻度論風に使う例も
+
+### 心理学・社会科学：危機の震源
+
+- 再現性危機の震源 ─ Open Science Collaboration (2015)
+- プリレジストレーション（事前登録）、Registered Reports、Bayesian analysis の採用拡大
+- **Benjamin et al. (2018)** *"Redefine Statistical Significance"*（Nature Human Behaviour）は、閾値を **p < 0.005** に厳しくする提案
+
+### Lindley のパラドックス
+
+**Dennis Lindley (1957)** が発見した、ベイズと頻度論の答えが真逆になる状況：
+
+> **n を十分大きくすると、頻度論は「H₀ を棄却」と言うが、ベイズは「H₀ を支持」と言うケースがある**
+
+これは、事前分布の設定とサンプルサイズの相互作用による現象。ベイズと頻度論が **同じ問いに違う答えを出し得る** ことの、理論的な警告です。
+
+---
+
+## L6｜研究者コラム：現代の統合的な視点
+
+<a id="l6"></a>
+
+### 「どちらか」を超えた枠組み
+
+21 世紀の統計学は、**「ベイズ vs 頻度論」の二項対立を超える** 方向に動いています。代表的な統合的ツール：
+
+- **Information Criteria**：AIC、BIC、DIC、**WAIC**（Watanabe-Akaike Information Criterion）
+- **Cross-validation**：ベイズでも頻度論でも使える、予測性能ベースのモデル比較
+- **Bayesian Model Averaging（BMA）**：複数モデルを事後確率で加重平均
+- **Posterior predictive checks**：モデルの予測分布と観測データを比較
+- **Approximate Bayesian Computation（ABC）**：複雑モデルの推論
+
+### Gelman の「多レベルモデル」統合
+
+**Andrew Gelman** は 2003 年以降、**多レベル（階層）モデル** を軸にベイズと頻度論の橋渡しを進めています：
+
+- 浅い階層：頻度論的な推論と同等
+- 深い階層：ベイズ特有の「情報の借用」（borrowing strength）が威力を発揮
+- **Stan** は Gelman のチームが開発した HMC ベースの汎用ベイズ推論エンジン
+
+### McElreath の "Statistical Rethinking"
+
+**Richard McElreath (2020)** *"Statistical Rethinking"*（2nd ed.）は、**因果推論（DAG）+ ベイズ** を統合する現代的な統計学入門書。「古いスタイル」の NHST を批判的に見直し、ベイズ推論を実践的に教える流れが広がっています。
+
+### 現代の実務ガイダンス
+
+「どういうときにベイズ、どういうときに頻度論か」を選ぶ指針：
+
+- **事前知識が豊富**：ベイズ（事前分布に組み込める）
+- **事前知識が乏しい / 中立性が重要**：弱情報事前ベイズ、または頻度論
+- **サンプルサイズが小さい**：ベイズ（事前情報で安定化）
+- **大規模データで速度が優先**：頻度論（計算コスト低い）
+- **不確実性の定量化が本質的**：ベイズ（事後分布の全体像）
+- **規制プロセス（医薬品承認等）で標準化が必要**：頻度論（NHST が標準）
+- **予測が主目的**：どちらでも可、交差検証で選ぶ
+
+### 持ち帰り
+
+> **100 年の論争の現在地は、「ベイズも頻度論も、それぞれの問題構造に適したツール」。どちらかを宗教的に選ぶのではなく、問いに応じて使い分け、多面的な証拠を集めるのが現代の統計実務。**
+
+ASA 2016 声明は、**「p 値だけで科学的結論を導くな」** という警告でした。しかし、それは「p 値を使うな」という意味ではありません。効果サイズ、信頼区間、事前知識、再現性、ベイズファクター、交差検証 ─ **複数の指標を併用する多面的推論** こそが、再現性危機を経た現代統計学の到達点です。
+
+### 学術文献（既発表のみ）
+
+- **Fisher (1925)** *Statistical Methods for Research Workers* ─ P 値の普及
+- **Neyman & Pearson (1933)** *"On the Problem of the Most Efficient Tests of Statistical Hypotheses"* (JRSS) ─ 仮説検定の体系化
+- **Jeffreys (1939)** *Theory of Probability* ─ ベイズの復権、Jeffreys prior
+- **Lindley (1957)** *"A Statistical Paradox"* (Biometrika) ─ ベイズと頻度論の不一致
+- **Berger & Sellke (1987)** *"Testing a Point Null Hypothesis"* (JASA) ─ P 値とベイズファクターの比較
+- **Open Science Collaboration (2015)** *"Estimating the Reproducibility of Psychological Science"* (Science) ─ 再現性危機の震源
+- **Head et al. (2015)** *"The Extent and Consequences of P-Hacking in Science"* (PLOS Biology)
+- **Wasserstein & Lazar (2016)** *"The ASA Statement on p-Values"* (TAS) ─ 2016 年 ASA 声明
+- **Benjamin et al. (2018)** *"Redefine Statistical Significance"* (Nature Human Behaviour) ─ p < 0.005 提案
+- **Gelman et al. (2013)** *Bayesian Data Analysis* (3rd ed.) ─ 現代ベイズの標準教科書
+- **McElreath (2020)** *Statistical Rethinking* (2nd ed.) ─ ベイズと因果推論の統合入門
+- **Gal & Ghahramani (2016)** *"Dropout as a Bayesian Approximation"* (ICML) ─ 深層学習とベイズ
+
+---
+
+## おわりに
+
+100 年の論争史を駆け足で辿ってきました：
+
+- **1925 Fisher** が P 値を普及、**1933 Neyman-Pearson** が仮説検定を体系化
+- **1939 Jeffreys** がベイズを復権、**1990 年代 MCMC** で計算の壁が崩れた
+- **2015-2016** 再現性危機 + ASA 声明で、P 値の機械的運用が批判された
+- **現代**：「ベイズ vs 頻度論」の二項対立を超える統合的な枠組みへ
+
+今回の持ち帰り：
+
+> **「どちらが正しい」ではなく、「どういうときにどちらを使うか」。ベイズも頻度論も、問題構造に応じた道具。多面的な証拠を集める姿勢こそが、再現性危機後の現代統計学の到達点。**
+
+次回は、研究コラム路線の 4 本目として、より一般向けに戻ります：
+
+**W11：因果推論 ─ 相関と因果はどう違うのか**
+
+を予定しています。[W4 誕生日問題](/blog/birthday-problem/) で触れた「多重検定の罠」や、現代の因果推論ツール（RCT、傾向スコア、操作変数、DAG）を扱います。
+
+<NoteCTA noteUrl="/go/note-w10" eventName="w10_note_cta" />

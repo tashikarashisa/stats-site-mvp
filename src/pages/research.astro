@@ -327,6 +327,60 @@ const entries: L6Entry[] = ([
 			},
 		],
 	},
+	{
+		episode: 10,
+		slug: 'bayes-vs-pvalue',
+		topic: 'ベイズ推論 vs 頻度論・ASA 声明・再現性危機',
+		heading: '100 年の論争と現代の統合',
+		intro:
+			'1925 Fisher の P 値、1933 Neyman-Pearson の仮説検定、1939 Jeffreys のベイズ復権、1990 年代 MCMC 革命、2015 再現性危機、2016 ASA 声明 ─ 統計学の 100 年の論争史。現代は「どちらが正しい」ではなく「どういうときにどちらを使うか」で統合されつつある。',
+		refs: [
+			{
+				cite: 'Fisher (1925) Statistical Methods for Research Workers',
+				note: 'P 値を実用的手法として普及させた教科書。本来は「注目に値する水準」だったが後世に「有意」として規範化される。',
+			},
+			{
+				cite: 'Neyman & Pearson (1933) "On the Problem of the Most Efficient Tests of Statistical Hypotheses" (JRSS)',
+				note: '仮説検定（帰無仮説 H0、対立仮説 H1、棄却域、第1種・第2種誤差、検出力）の体系化。品質管理・工学で定着。',
+			},
+			{
+				cite: 'Jeffreys (1939) Theory of Probability',
+				note: '無情報事前分布（Jeffreys prior）を提案し、ベイズを「客観的」な方向で復権させた古典。',
+			},
+			{
+				cite: 'Lindley (1957) "A Statistical Paradox" (Biometrika)',
+				note: 'サンプルサイズを大きくすると頻度論は H0 棄却、ベイズは H0 支持と真逆の結論に至る現象。事前分布と n の相互作用を示す。',
+			},
+			{
+				cite: 'Berger & Sellke (1987) "Testing a Point Null Hypothesis" (JASA)',
+				note: 'P 値とベイズファクターの体系的比較。P 値の過剰な棄却傾向を定量的に批判。',
+			},
+			{
+				cite: 'Gelman et al. (2013) Bayesian Data Analysis (3rd ed.)',
+				note: '現代ベイズ統計の標準教科書。「弱情報事前分布」を実用的な標準として確立。',
+			},
+			{
+				cite: 'Open Science Collaboration (2015) "Estimating the Reproducibility of Psychological Science" (Science)',
+				note: '心理学の有名論文 100 本を再現実験、約 36% しか再現できないことを実証。再現性危機の震源。',
+			},
+			{
+				cite: 'Head et al. (2015) "The Extent and Consequences of P-Hacking in Science" (PLOS Biology)',
+				note: '学術論文の P 値分布に 0.05 直下の不自然なピーク ─ 意図的・無意識的な P-hacking の実証。',
+			},
+			{
+				cite: 'Wasserstein & Lazar (2016) "The ASA Statement on p-Values" (TAS)',
+				note: '米国統計学会の異例の公式声明。「P<0.05 の機械的判定」を明確に警告、多面的な証拠を推奨。',
+			},
+			{
+				cite: 'Benjamin et al. (2018) "Redefine Statistical Significance" (Nature Human Behaviour)',
+				note: '「P<0.05」を「P<0.005」に厳しくする提案。再現性危機への具体的対応案。',
+			},
+			{
+				cite: 'McElreath (2020) Statistical Rethinking (2nd ed.)',
+				note: 'ベイズ推論と因果推論（DAG）を統合する現代的入門書。NHST を批判的に再構成。',
+			},
+		],
+	},
 ] as L6Entry[]).sort((a, b) => a.episode - b.episode);
 ---
 
