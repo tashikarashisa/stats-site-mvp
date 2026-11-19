@@ -1,0 +1,314 @@
+---
+title: '因果推論 ─ 相関と因果はどう違うのか'
+description: 'アイスクリームと溺死の相関、RCT、傾向スコア、操作変数、Pearl の DAG、Angrist & Imbens の 2021 年ノーベル賞 ─ 「相関は因果ではない」という常識を数学的にひっくり返した因果革命。研究コラム路線 4 本目。'
+pubDate: 'Nov 21 2026'
+ogImage: '/og/causal-inference.png'
+---
+
+import NoteCTA from '../../components/NoteCTA.astro';
+
+「アイスクリームの売上が増えると、プールでの溺死者が増える」── これは **相関** があります。でも、**アイスクリームが溺死を引き起こしているわけではない**。共通の原因（夏の気温）が、両方を押し上げているだけ。
+
+統計学の入門で必ず習う「**相関は因果ではない**」という格言。でも、多くの人がここで止まってしまう。「じゃあ、本当の因果はどうやって知るのか？」
+
+今回は、この問いに現代統計学が辿り着いた答えを辿ります。1920 年代の Fisher による **ランダム化比較試験（RCT）** から、1983 年 Rosenbaum & Rubin の **傾向スコア**、2000 年 Pearl の **因果ダイアグラム（DAG）**、そして **2021 年のノーベル経済学賞**（Angrist & Imbens、Card の因果推論研究）まで ── **「因果革命」** と呼ばれる 100 年の歩み。研究コラム路線（AXIS 3「研究の最前線」）の 4 本目です。
+
+---
+
+## L1｜相関と因果の有名な例
+
+### アイスクリームと溺死
+
+夏になると、アイスクリームの売上が増え、同時にプールでの溺死事故も増えます。この 2 つの変数は、強い **正の相関** を示します。でも、
+
+> **アイスクリーム → 溺死** という因果はない。
+
+本当の構造は：
+
+```
+          気温
+         /    \
+        v      v
+   アイス売上   溺死件数
+```
+
+**気温** という **共通原因**（交絡変数）が、アイス売上と溺死件数の両方を押し上げている。アイスクリームを禁止しても溺死は減りません。
+
+### コーヒーと肺がん
+
+1960-70 年代、「コーヒーを飲むと肺がんになりやすい」という観察研究が複数発表されました。でも、原因はコーヒーではなく **喫煙**。当時の喫煙者はコーヒーも好む傾向があり、喫煙という交絡変数が真の原因だった。
+
+### ノーベル賞と経済水準
+
+国別で、ノーベル賞受賞者数と、一人当たりチョコレート消費量に正の相関が見られる、という有名な論文（Messerli 2012, NEJM）があります。しかし、これも **両者を押し上げる共通原因**（経済水準、教育水準）があるだけで、「チョコを食べればノーベル賞」ではない。
+
+これらの例が示すのは：
+
+> **観察データだけで因果を推定するのは、極めて危険。でも、それを乗り越える数学的手法を、20 世紀の統計学は開発してきた。**
+
+---
+
+## L2｜「相関 ≠ 因果」の 3 つの誤り方
+
+相関が因果でないケースは、大きく 3 つのパターンに分類できます。
+
+### 誤り 1：交絡（Confounding）
+
+共通原因 Z が X と Y の両方を押し上げる構造：
+
+```
+     Z
+    / \
+   v   v
+   X   Y
+```
+
+**例**：アイス売上と溺死（交絡 = 気温）、コーヒーと肺がん（交絡 = 喫煙）。
+
+### 誤り 2：逆因果（Reverse Causation）
+
+実は因果の方向が逆：
+
+```
+   X ← Y
+```
+
+**例**：「幸せな人は結婚しやすい」vs「結婚すると幸せになる」。どちらも成立しうるし、両方同時かもしれない。横断データだけでは区別できない。
+
+### 誤り 3：選択バイアス（Selection Bias）
+
+サンプルの選び方が歪みを生む：
+
+**例**：「大学院卒の年収は高い」── でも大学院に進学する人は、もともと所得獲得能力が高い傾向がある（ability bias）。大学院の教育効果と、進学者の selection 効果が混ざる。
+
+### 因果推論の中心課題
+
+> **観察データからこれら 3 つの誤りを排除して、X が Y に与える純粋な因果効果を推定するには、どうすればいいか？**
+
+これが、因果推論（Causal Inference）という分野の中心課題です。
+
+---
+
+## L3｜RCT ─ 因果推論の黄金律
+
+### Fisher 1935 ─ ランダム化の発明
+
+**Ronald A. Fisher**（[W10 で登場した P 値の父](/blog/bayes-vs-pvalue/)）は、1935 年の *"The Design of Experiments"* で、**ランダム化比較試験（Randomized Controlled Trial, RCT）** を体系化しました。
+
+RCT の核心は、シンプルです：
+
+1. 被験者を **ランダムに** 2 群に分ける（治療群 T、対照群 C）
+2. 治療群にだけ介入（新薬、政策、プログラム）を行う
+3. 2 群の結果を比較
+
+**なぜこれで因果が推定できるのか？** ランダム割付によって、**治療群と対照群の、観察できない変数まで含めた分布が、期待値レベルで同じ** になる。だから、観察される結果の差 = 介入の純粋な因果効果、と言える。
+
+### 潜在的結果（Potential Outcomes）の枠組み
+
+Fisher の直感を数学的に定式化したのは **Donald Rubin（1974）** の *Journal of Educational Psychology* 論文：
+
+- 各個人 $i$ について、**介入を受けた場合の結果** $Y_i(1)$ と **受けなかった場合の結果** $Y_i(0)$ を考える
+- 個人レベルの因果効果 = $Y_i(1) - Y_i(0)$
+- でも、現実には $Y_i(1)$ と $Y_i(0)$ の **片方しか観測できない**（反事実の問題）
+- RCT は、$T_i$ がランダムなので、治療群の平均と対照群の平均の差が **平均因果効果（ATE）** に等しくなる
+
+これは **Rubin 因果モデル** または **potential outcomes framework** と呼ばれ、現代因果推論の基礎です。
+
+### RCT の限界
+
+RCT は因果推定の黄金律ですが、常に実施できるわけではありません：
+
+- **倫理**：喫煙の害を調べるために被験者をランダムに喫煙させることはできない
+- **コスト**：長期政策の効果（早期教育の 30 年後など）は数億円かかる
+- **時間**：数十年の追跡が必要な場合も
+- **実行可能性**：マクロ経済政策、金融危機への対応など、ランダム割付が概念的に不可能
+
+だから、**観察データから因果を推定する手法** が、別途必要になります。
+
+---
+
+## L4｜観察データから因果を推定する手法
+
+### 傾向スコア（Propensity Score）─ Rosenbaum & Rubin 1983
+
+**Paul Rosenbaum** と **Donald Rubin** が 1983 年 *"The Central Role of the Propensity Score in Observational Studies for Causal Effects"*（Biometrika）で提案：
+
+- **傾向スコア** $e(X) = P(T=1 \mid X)$：観察される共変量 $X$ の下で治療を受ける確率
+- 同じ傾向スコアを持つ治療群と対照群を比較すれば、**観察される共変量の影響を調整** した因果効果が得られる
+- マッチング、層別化、逆確率重み付け（IPW）などの実装方法
+
+**制約**：観察できない交絡変数が存在すると、依然としてバイアスが残る（これを「無視可能性仮定」strong ignorability と呼ぶ）。
+
+### 操作変数（Instrumental Variables, IV）─ Angrist & Imbens 1995
+
+**Joshua Angrist** と **Guido Imbens** が 1995 年 *"Identification and Estimation of Local Average Treatment Effects"*（Econometrica）で、IV による因果推定を再定式化：
+
+- **操作変数 Z**：
+  - $T$（治療）には影響する
+  - $Y$（結果）には $T$ を通じてしか影響しない（排除制約）
+  - 交絡変数 $U$ には影響されない
+- 条件を満たす Z があれば、$Z$ を通じた変動を使って $T \to Y$ の因果効果を推定できる
+- **古典例**：Angrist (1990) のベトナム戦争徴兵抽選 ─ 徴兵されたかどうかの IV として、生年月日の徴兵抽選番号を使用
+
+### 差分の差分（Difference-in-Differences, DiD）─ Card & Krueger 1994
+
+**David Card** と **Alan Krueger** が 1994 年 *"Minimum Wages and Employment: A Case Study of the Fast-Food Industry..."*（AER）で、最低賃金引き上げの雇用への因果効果を推定：
+
+- 政策変更 **前後** × 影響あり群／影響なし群 の 2×2 比較
+- 時間トレンドと群別固定効果を同時にコントロール
+- 結論：最低賃金引き上げは、雇用を減らさなかった（当時の経済学の常識を覆した）
+
+### 回帰不連続（Regression Discontinuity, RDD）
+
+ある **閾値** で介入の有無が決まる状況を使う：
+
+- 大学入試の合否、奨学金の採否、年齢制限などで活用
+- 閾値のすぐ上と下の個体は、**他の属性がほぼ同じ** と仮定できる
+- Thistlethwaite & Campbell (1960) 原型、Hahn, Todd & Van der Klaauw (2001) で統計理論整備
+
+これらの手法は、**自然実験（natural experiment）** という考え方と結びつき、「意図的に実験できなくても、自然界や制度の中にある "ほぼランダム" な変動を使う」という戦略を切り開きました。
+
+---
+
+## L5｜Pearl の因果ダイアグラム（DAG）
+
+### Judea Pearl 2000 ─ 因果推論の構造的革命
+
+**Judea Pearl**（UCLA 計算機科学教授、2011 年チューリング賞）は 2000 年 *"Causality: Models, Reasoning, and Inference"*（Cambridge UP）で、**因果推論を確率グラフで扱う枠組み** を体系化しました。
+
+### 有向非巡回グラフ（DAG）
+
+変数間の因果関係を **矢印** で表す：
+
+- ノード = 変数
+- 矢印 = 直接的な因果関係
+- 巡回しない（A → B → C → A は禁止）
+
+アイスクリーム・溺死の例：
+
+```
+    気温
+   /    \
+  v      v
+ アイス  溺死
+```
+
+### Do 演算子と介入分布
+
+Pearl の核心は、**観察確率** $P(Y \mid X=x)$ と **介入確率** $P(Y \mid \text{do}(X=x))$ を区別すること：
+
+- **$P(Y \mid X=x)$**：X が x であるケースを観察したとき、Y はどうなっているか？
+- **$P(Y \mid \text{do}(X=x))$**：X を強制的に x に設定したら、Y はどうなるか？
+
+アイスクリーム・溺死の例では：
+- $P(\text{溺死} \mid \text{アイス売上 高})$ は高い（夏には両方起こるから）
+- $P(\text{溺死} \mid \text{do}(\text{アイス売上 高}))$ は変わらない（介入しても気温は動かないから）
+
+### Back-door 基準と Front-door 基準
+
+DAG の構造から、「どの変数をコントロールすれば交絡を除けるか」を機械的に判定するルール：
+
+- **Back-door criterion**：X と Y の間の "裏口" を全てブロックする変数集合が特定できれば、それを条件付けして因果効果を推定可能
+- **Front-door criterion**：裏口が開いていても、"正面の媒介変数" を使って因果効果を推定できる場合がある
+
+これにより、「交絡を除くために何を条件付けるべきか」という問いが、グラフの構造から **アルゴリズム的に** 答えられるようになりました。
+
+### Pearl の "因果革命" 宣言
+
+Pearl は、統計学が長らく「相関の科学」に留まり、因果に踏み込むことを避けてきたと批判。**"The Ladder of Causation"**（因果の階梯）を提案：
+
+1. **観察（Association）**：相関を見る
+2. **介入（Intervention）**：do 演算子で介入効果を考える
+3. **反事実（Counterfactuals）**：「もし別の選択をしていたら」を考える
+
+従来の統計学は 1 段目に留まっていた。因果推論は 2・3 段目に踏み込む、というのが Pearl の主張です。
+
+---
+
+## L6｜研究者コラム：現代の因果革命
+
+<a id="l6"></a>
+
+### 2021 ノーベル経済学賞 ─ 因果推論の制度的承認
+
+2021 年のノーベル経済学賞は、**David Card**、**Joshua Angrist**、**Guido Imbens** の 3 名に授与されました。受賞理由は：
+
+- **Card**：自然実験を労働経済学に応用した功績
+- **Angrist & Imbens**：自然実験から因果関係を描き出す方法論的貢献
+
+これは、**因果推論が経済学の中心的手法として確立した** ことの象徴的な出来事でした。Angrist & Pischke (2009) *"Mostly Harmless Econometrics"* は、彼らの手法を体系化した定番教科書で、現代の計量経済学・公共政策・開発経済学の必読書です。
+
+### 機械学習との統合：因果推論 × ML
+
+21 世紀に入って、**因果推論と機械学習の統合** が急速に進んでいます：
+
+- **Causal Forests**（Wager & Athey 2018, JASA）：ランダムフォレストで、個体ごとの異質な因果効果（Heterogeneous Treatment Effects, HTE）を推定
+- **Double/Debiased Machine Learning**（Chernozhukov et al. 2018, Econometrics Journal）：ML で傾向スコアと結果モデルを推定し、バイアスを二重に打ち消す手法
+- **Targeted Maximum Likelihood Estimation（TMLE）**：ML + 因果推論の統合フレームワーク（van der Laan 2006 以降）
+
+### 実用ツール
+
+- **DoWhy**（Microsoft Research, 2019）：Pearl の DAG を Python で扱うライブラリ
+- **EconML**（Microsoft）：ML ベースの因果推論ツールキット
+- **CausalML**（Uber）：異質因果効果推定ライブラリ
+
+### ベイズ因果推論 ─ W10 との交差
+
+[W10 ベイズ推論](/blog/bayes-vs-pvalue/) で見た事後分布の考え方は、因果推論とも深く結びついています：
+
+- **ベイズ因果森林**（Bayesian Causal Forest, Hahn, Murray & Carvalho 2020, Bayesian Analysis）
+- **モデル不確実性を含めた因果効果の信用区間**
+- McElreath (2020) *"Statistical Rethinking"*（2nd ed.）は、**ベイズ + DAG** を統合的に教える現代的入門書
+
+### 一般向けの到達点：Pearl & Mackenzie 2018
+
+**Pearl & Mackenzie (2018)** *"The Book of Why"* は、Pearl 本人による因果革命の一般向け解説書。「相関と因果はどう違うのか」を、哲学・科学史・現代統計まで含めて縦断的に扱う名著です。
+
+### 持ち帰り
+
+> **「相関は因果ではない」から、「観察データから因果を推定する方法を開発する」へ。この 100 年の歩みが、現代の因果革命。**
+
+因果推論は、医学（RCT, FDA）・経済学（自然実験, ノーベル賞）・政策評価（DiD, RDD）・機械学習（Causal ML）・AI（Pearl の DAG）まで、**21 世紀の実証科学の中核** になりました。
+
+### 学術文献（既発表のみ）
+
+- **Fisher (1935)** *The Design of Experiments* ─ RCT の体系化
+- **Rubin (1974)** *"Estimating Causal Effects of Treatments..."* (JEP) ─ potential outcomes framework
+- **Rosenbaum & Rubin (1983)** *"The Central Role of the Propensity Score..."* (Biometrika)
+- **Card & Krueger (1994)** *"Minimum Wages and Employment"* (AER) ─ DiD 代表例、ノーベル賞
+- **Angrist & Imbens (1995)** *"Identification and Estimation of Local Average Treatment Effects"* (Econometrica) ─ IV の現代化、ノーベル賞
+- **Hahn, Todd & Van der Klaauw (2001)** *"Identification and Estimation of Treatment Effects with a Regression-Discontinuity Design"* (Econometrica)
+- **Pearl (2000, 2nd ed. 2009)** *Causality: Models, Reasoning, and Inference* ─ DAG と do 演算子
+- **Angrist & Pischke (2009)** *Mostly Harmless Econometrics* ─ 計量経済学の現代的標準
+- **Pearl & Mackenzie (2018)** *The Book of Why* ─ 一般向け名著
+- **Wager & Athey (2018)** *"Estimation and Inference of Heterogeneous Treatment Effects Using Random Forests"* (JASA)
+- **Chernozhukov et al. (2018)** *"Double/Debiased Machine Learning..."* (Econometrics Journal)
+- **Hahn, Murray & Carvalho (2020)** *"Bayesian Regression Tree Models for Causal Inference"* (Bayesian Analysis)
+- **McElreath (2020)** *Statistical Rethinking* (2nd ed.) ─ ベイズ + DAG の統合入門
+- **Messerli (2012)** *"Chocolate Consumption, Cognitive Function, and Nobel Laureates"* (NEJM) ─ 相関の誤読の有名な例
+
+---
+
+## おわりに
+
+100 年の因果革命を駆け足で辿ってきました：
+
+- **1935 Fisher** ─ RCT を発明、ランダム化で交絡を平均化
+- **1974 Rubin** ─ potential outcomes framework を数学的に定式化
+- **1983 Rosenbaum & Rubin** ─ 傾向スコアで観察データから因果を推定
+- **1990s-2000s** ─ IV、DiD、RDD の自然実験手法が開発される
+- **2000 Pearl** ─ DAG と do 演算子で因果を構造的に扱う
+- **2018-2020s** ─ 機械学習との統合（Causal Forests、Double ML、Bayesian Causal Trees）
+- **2021** ─ Card・Angrist・Imbens がノーベル経済学賞、因果推論が経済学の中核に
+
+今回の持ち帰り：
+
+> **「相関は因果ではない」で止まらずに、「じゃあ因果はどう推定するのか」まで踏み込むのが現代統計学。RCT が黄金律、観察データには傾向スコア・IV・DiD・RDD、構造化には DAG、ML 時代には Causal Forests。手法は揃っている。**
+
+次回は、研究コラム路線の 5 本目として：
+
+**W12：ノイズ対シグナル ─ 機械学習の一般化はなぜ成り立つのか**
+
+を予定しています。深層学習の二重降下（double descent）、暗黙の正則化、PAC-Bayes の理論まで。「なぜ過パラメータモデルが汎化するのか」という、現代機械学習の最大の謎を扱います。
+
+<NoteCTA noteUrl="/go/note-w11" eventName="w11_note_cta" />
