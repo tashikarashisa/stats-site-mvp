@@ -381,6 +381,64 @@ const entries: L6Entry[] = ([
 			},
 		],
 	},
+	{
+		episode: 11,
+		slug: 'causal-inference',
+		topic: '因果推論・RCT・DAG・Angrist-Imbens 2021',
+		heading: '100 年の因果革命',
+		intro:
+			'1935 Fisher の RCT、1974 Rubin の potential outcomes、1983 Rosenbaum & Rubin の傾向スコア、1990s-2000s の IV/DiD/RDD、2000 Pearl の DAG、2018- の機械学習統合、そして 2021 ノーベル経済学賞（Card・Angrist・Imbens）─ 「相関は因果ではない」から「因果を推定する方法を開発する」へ、100 年の歩み。',
+		refs: [
+			{
+				cite: 'Fisher (1935) The Design of Experiments',
+				note: 'ランダム化比較試験（RCT）の体系化。治療群と対照群をランダム割付することで、観察できない交絡変数も期待値レベルで平均化する。',
+			},
+			{
+				cite: 'Rubin (1974) "Estimating Causal Effects of Treatments in Randomized and Nonrandomized Studies" (JEP)',
+				note: 'Potential outcomes framework（反事実枠組み）の数学的定式化。各個人に Y(1) と Y(0) の両方を考え、因果効果 = Y(1)−Y(0) とする現代因果推論の基礎。',
+			},
+			{
+				cite: 'Rosenbaum & Rubin (1983) "The Central Role of the Propensity Score in Observational Studies for Causal Effects" (Biometrika)',
+				note: '観察データから因果を推定するための傾向スコア e(X) = P(T=1|X) を提案。同じスコアの治療群・対照群の比較で交絡を調整。',
+			},
+			{
+				cite: 'Card & Krueger (1994) "Minimum Wages and Employment: A Case Study..." (AER)',
+				note: '差分の差分（DiD）の代表論文。最低賃金引き上げは雇用を減らさなかったことを示し、経済学の常識を覆す。Card の 2021 ノーベル賞の中核業績。',
+			},
+			{
+				cite: 'Angrist & Imbens (1995) "Identification and Estimation of Local Average Treatment Effects" (Econometrica)',
+				note: '操作変数（IV）による Local Average Treatment Effect の推定。自然実験から因果を描き出す方法論の金字塔。Angrist & Imbens の 2021 ノーベル賞の中核業績。',
+			},
+			{
+				cite: 'Hahn, Todd & Van der Klaauw (2001) "Identification and Estimation of Treatment Effects with a Regression-Discontinuity Design" (Econometrica)',
+				note: '回帰不連続（RDD）の統計理論整備。閾値のすぐ上下の個体を比較することで、閾値を介した介入の因果効果を推定。',
+			},
+			{
+				cite: 'Pearl (2000, 2nd ed. 2009) Causality: Models, Reasoning, and Inference',
+				note: '因果推論を有向非巡回グラフ（DAG）で扱う枠組み。do 演算子、Back-door 基準、Front-door 基準。2011 Turing 賞受賞者の集大成。',
+			},
+			{
+				cite: 'Angrist & Pischke (2009) Mostly Harmless Econometrics',
+				note: '自然実験ベースの計量経済学の標準教科書。IV、DiD、RDD を実務家向けに体系化。',
+			},
+			{
+				cite: 'Pearl & Mackenzie (2018) The Book of Why',
+				note: 'Pearl 本人による因果革命の一般向け名著。"The Ladder of Causation"（観察・介入・反事実の 3 段階）が中心概念。',
+			},
+			{
+				cite: 'Wager & Athey (2018) "Estimation and Inference of Heterogeneous Treatment Effects using Random Forests" (JASA)',
+				note: 'Causal Forests ─ ランダムフォレストで個体ごとの異質な因果効果（HTE）を推定する ML 統合手法。',
+			},
+			{
+				cite: 'Chernozhukov et al. (2018) "Double/Debiased Machine Learning for Treatment and Structural Parameters" (Econometrics Journal)',
+				note: 'ML で傾向スコアと結果モデルを推定し、バイアスを二重に打ち消す。因果推論と ML の統合の決定版。',
+			},
+			{
+				cite: 'Hahn, Murray & Carvalho (2020) "Bayesian Regression Tree Models for Causal Inference" (Bayesian Analysis)',
+				note: 'Bayesian Causal Forest ─ W10 のベイズ推論と因果推論を交差させた現代的手法。',
+			},
+		],
+	},
 ] as L6Entry[]).sort((a, b) => a.episode - b.episode);
 ---
 
