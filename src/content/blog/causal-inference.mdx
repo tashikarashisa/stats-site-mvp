@@ -25,12 +25,7 @@ import NoteCTA from '../../components/NoteCTA.astro';
 
 本当の構造は：
 
-```
-          気温
-         /    \
-        v      v
-   アイス売上   溺死件数
-```
+![気温が共通原因で、アイス売上と溺死件数の両方を押し上げている DAG](/diagrams/w11/ice-death-confounder.png)
 
 **気温** という **共通原因**（交絡変数）が、アイス売上と溺死件数の両方を押し上げている。アイスクリームを禁止しても溺死は減りません。
 
@@ -56,12 +51,7 @@ import NoteCTA from '../../components/NoteCTA.astro';
 
 共通原因 Z が X と Y の両方を押し上げる構造：
 
-```
-     Z
-    / \
-   v   v
-   X   Y
-```
+![交絡の DAG：Z が X と Y の両方の共通原因](/diagrams/w11/confounding.png)
 
 **例**：アイス売上と溺死（交絡 = 気温）、コーヒーと肺がん（交絡 = 喫煙）。
 
@@ -69,9 +59,7 @@ import NoteCTA from '../../components/NoteCTA.astro';
 
 実は因果の方向が逆：
 
-```
-   X ← Y
-```
+![逆因果の DAG：X←Y で本当の原因は Y](/diagrams/w11/reverse-causation.png)
 
 **例**：「幸せな人は結婚しやすい」vs「結婚すると幸せになる」。どちらも成立しうるし、両方同時かもしれない。横断データだけでは区別できない。
 
@@ -186,12 +174,7 @@ RCT は因果推定の黄金律ですが、常に実施できるわけではあ�
 
 アイスクリーム・溺死の例：
 
-```
-    気温
-   /    \
-  v      v
- アイス  溺死
-```
+![Pearl の DAG：気温が共通原因、アイス→溺死の直接因果は無い](/diagrams/w11/pearl-ice-death.png)
 
 ### Do 演算子と介入分布
 
