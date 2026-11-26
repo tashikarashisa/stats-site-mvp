@@ -439,6 +439,48 @@ const entries: L6Entry[] = ([
 			},
 		],
 	},
+	{
+		episode: 12,
+		slug: 'simpsons-paradox',
+		topic: 'シンプソンのパラドックス・層別化・因果構造',
+		heading: '全体と部分で結論が逆',
+		intro:
+			'1903 Yule、1951 Simpson で定式化された「全体で見た関連が、部分集合では逆転する」現象。1975 UC バークレー入試論文、1986 腎結石治療論文で有名に。Pearl の DAG で「どちらを見るべきか」は因果構造に依存することが明確化された。',
+		refs: [
+			{
+				cite: 'Yule (1903) "Notes on the Theory of Association of Attributes in Statistics" (Biometrika)',
+				note: '現象の原型を最初に指摘した論文。層別化によって関連の方向が変わる可能性を示唆。',
+			},
+			{
+				cite: 'Simpson (1951) "The Interpretation of Interaction in Contingency Tables" (JRSS-B)',
+				note: '現代的な定式化。「部分集合ごとの関連と全体の関連が矛盾しうる」ことを分割表の数学で示す。',
+			},
+			{
+				cite: 'Berkson (1946) "Limitations of the Application of Fourfold Table Analysis to Hospital Data" (Biometrics Bulletin)',
+				note: 'Berkson paradox ─ 条件付けで無相関な変数に相関が生まれる類似現象。病院データの罠。',
+			},
+			{
+				cite: 'Lord (1967) "A Paradox in the Interpretation of Group Comparisons" (Psychological Bulletin)',
+				note: 'Lord paradox ─ 共変量調整の難しさを示す類似現象。ベースライン調整の矛盾。',
+			},
+			{
+				cite: 'Bickel, Hammel & O\'Connell (1975) "Sex Bias in Graduate Admissions: Data from Berkeley" (Science)',
+				note: '1973 UC バークレー大学院入試を分析。全体は男性有利、学科別はほぼ女性有利、という古典例。',
+			},
+			{
+				cite: 'Charig et al. (1986) "Comparison of Treatment of Renal Calculi..." (BMJ)',
+				note: '腎結石治療の例。全体では治療 B が有利に見えるが、結石の大きさで層別化すると治療 A が全ての層で勝つ。',
+			},
+			{
+				cite: 'Pearl (2000, 2nd ed. 2009) Causality: Models, Reasoning, and Inference',
+				note: 'シンプソンのパラドックスを DAG と back-door 基準で決定的に整理。「どちらを見るべきかは因果構造次第」。',
+			},
+			{
+				cite: 'Pearl & Mackenzie (2018) The Book of Why',
+				note: 'パラドックスを 1 章割いて一般向けに解説。「相関の科学から脱却するには因果構造が必要」。',
+			},
+		],
+	},
 ] as L6Entry[]).sort((a, b) => a.episode - b.episode);
 ---
 
